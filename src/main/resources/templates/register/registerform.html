@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+>
+  <th:block layout:fragment="css">
+    <style>
+      .fieldError {
+        color: #bd2130;
+      }
+    </style>
+  </th:block>
+
+  <th:block layout:fragment="script"></th:block>
+
+  <div layout:fragment="content">
+    <div class="container center_div w-50 mt-4">
+      <form action="/register" role="form" method="post">
+        <div class="form-group mb-3">
+          <label for="name">이름</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="이름을 입력해주세요"
+            id="name"
+            name="name"
+            value=""
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="email">이메일주소</label>
+          <input
+            type="email"
+            class="form-control"
+            placeholder="이메일을 입력해주세요"
+            id="email"
+            name="email"
+            value=""
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="address">주소</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="주소를 입력해주세요"
+            id="address"
+            name="address"
+            value=""
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password">비밀번호</label>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="비밀번호 입력"
+            id="password"
+            name="password"
+            value=""
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="password2">비밀번호 확인</label>
+          <input
+            type="password"
+            class="form-control"
+            placeholder="비밀번호 재입력"
+            id="password2"
+            name="password2"
+            value=""
+          />
+        </div>
+
+        <div class="mb-3 text-center">
+          <button type="submit" class="btn btn-primary" style="">
+            회원 가입
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</html>
