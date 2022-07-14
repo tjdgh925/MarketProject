@@ -81,10 +81,10 @@ class MemberServiceTest {
         doReturn(Optional.of(member)).when(memberRepository).findByEmail(email);
 
         //when
-        Member result = target.findByEmail(email);
+        Optional<Member> result = target.findByEmail(email);
 
         //then
-        assertThat(result).isEqualTo(member);
+        assertThat(result.get()).isEqualTo(member);
     }
 
 }
