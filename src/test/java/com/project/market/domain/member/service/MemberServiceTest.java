@@ -63,4 +63,28 @@ class MemberServiceTest {
         verify(memberRepository, times(1)).save(any(Member.class));
     }
 
+    @Test
+    public void 회원조회테스트_실패() throws Exception {
+        //given
+        doReturn(Optional.empty()).when(memberRepository).findByEmail(email);
+
+        //when
+        final BusinessException result = assertThrows(BusinessException.class, () -> target.findByEmail(email));
+
+        //then
+        assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_MEMBER.getMessage());
+    }
+
+    @Test
+    public void 회원조회테스트_성공() throws Exception {
+        //given
+        doReturn(Optional.of(member)).when(memberRepository).findByEmail(email);
+
+        //when
+        Member result = target.findByEmail(email);
+
+        //then
+        assertThat(result).isEqualTo(member);
+    }
+
 }
