@@ -6,6 +6,7 @@ import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.web.register.dto.MemberRegisterDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberRegisterService {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional
     public void register(MemberRegisterDto registerDto) {
         validatePasswordCheck(registerDto);
-        Member member = registerDto.toEntity();
+        Member member = registerDto.toEntity(passwordEncoder);
         memberService.register(member);
     }
 

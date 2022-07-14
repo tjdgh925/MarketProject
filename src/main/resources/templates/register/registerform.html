@@ -16,73 +16,47 @@
 
   <div layout:fragment="content">
     <div class="container center_div w-50 mt-4">
-      <form action="/register" role="form" method="post">
+      <form action="/register" role="form" method="post" th:object="${memberRegisterDto}">
+
         <div class="form-group mb-3">
-          <label for="name">이름</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="이름을 입력해주세요"
-            id="name"
-            name="name"
-            value=""
-          />
+          <label th:for="name">이름</label>
+          <input type="text" class="form-control" placeholder="이름을 입력해주세요" th:field="*{name}">
+          <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group mb-3">
-          <label for="email">이메일주소</label>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="이메일을 입력해주세요"
-            id="email"
-            name="email"
-            value=""
-          />
+          <label th:for="email">이메일주소</label>
+          <input type="email" class="form-control" placeholder="이메일을 입력해주세요" th:field="*{email}">
+          <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group mb-3">
-          <label for="address">주소</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="주소를 입력해주세요"
-            id="address"
-            name="address"
-            value=""
-          />
+          <label th:for="address">주소</label>
+          <input type="text" class="form-control" placeholder="주소를 입력해주세요" th:field="*{address}">
+          <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group mb-3">
-          <label for="password">비밀번호</label>
-          <input
-            type="password"
-            class="form-control"
-            placeholder="비밀번호 입력"
-            id="password"
-            name="password"
-            value=""
-          />
+          <label th:for="password">비밀번호</label>
+          <input type="password" class="form-control" placeholder="비밀번호 입력" th:field="*{password}">
+          <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group mb-3">
-          <label for="password2">비밀번호 확인</label>
-          <input
-            type="password"
-            class="form-control"
-            placeholder="비밀번호 재입력"
-            id="password2"
-            name="password2"
-            value=""
-          />
+          <label th:for="password2">비밀번호 확인</label>
+          <input type="password" class="form-control" placeholder="비밀번호 재입력" th:field="*{password2}">
+          <p th:if="${#fields.hasErrors('password2')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
+        </div>
+
+        <div class="mb-3" th:if="${#fields.hasGlobalErrors()}">
+          <p class="field-error text-center" th:each="error : ${#fields.globalErrors()}" th:text="${error}">글로벌 오류 메시지</p>
         </div>
 
         <div class="mb-3 text-center">
-          <button type="submit" class="btn btn-primary" style="">
-            회원 가입
-          </button>
+          <button type="submit" class="btn btn-primary" style="">회원 가입</button>
         </div>
       </form>
+
     </div>
   </div>
 </html>

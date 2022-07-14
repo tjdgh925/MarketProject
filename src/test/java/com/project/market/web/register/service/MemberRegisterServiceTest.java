@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +23,8 @@ class MemberRegisterServiceTest {
     private MemberRegisterService target;
     @Mock
     private MemberService memberService;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     private final String email = "test@email.com";
     private final String memberName = "tester";

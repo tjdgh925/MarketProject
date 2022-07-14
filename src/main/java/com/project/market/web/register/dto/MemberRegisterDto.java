@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -33,13 +34,13 @@ public class MemberRegisterDto {
     private String password2;
 
 
-    public Member toEntity() {
+    public Member toEntity(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .memberName(name)
                 .memberType(MemberType.EMAIL)
                 .address(address)
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .role(MemberRole.ADMIN)
                 .build();
     }

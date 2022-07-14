@@ -28,4 +28,8 @@ public class MemberService {
             throw new BusinessException(ErrorCode.ALREADY_REGISTERED_MEMBER);
         }
     }
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
 }
