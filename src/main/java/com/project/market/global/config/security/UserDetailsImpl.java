@@ -1,37 +1,52 @@
 package com.project.market.global.config.security;
 
+import com.project.market.domain.member.constant.MemberRole;
+import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.nio.file.attribute.UserPrincipal;
+import java.util.*;
 
-public class UserDetailsImpl implements UserDetails {
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class UserDetailsImpl implements UserDetails, OAuth2User {
 
-    private final Member member;
-    private final List<GrantedAuthority> authorityList = new ArrayList<>();
+    private final String email;
+    private final String password;
+    private final MemberType memberType;
+    private final MemberRole memberRole;
+    private final Collection<GrantedAuthority> authorities;
+    private Map<String, Object> attributes;
 
-    public UserDetailsImpl(Member member) {
-        this.member = member;
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().name()));
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorityList;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        return email;
     }
 
     @Override
@@ -52,5 +67,27 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return email;
+    }
+
+    public static UserDetailsImpl create(Member member) {
+        return new UserDetailsImpl(
+                member.getEmail(),
+                member.getPassword(),
+                member.getMemberType(),
+                MemberRole.USER,
+                Collections.singletonList(new SimpleGrantedAuthority(MemberRole.USER.getKey()))
+        );
+    }
+
+    public static UserDetailsImpl create(Member member, Map<String, Object> attributes) {
+        UserDetailsImpl userPrincipal = create(member);
+        userPrincipal.setAttributes(attributes);
+
+        return userPrincipal;
     }
 }

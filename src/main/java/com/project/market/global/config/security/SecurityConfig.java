@@ -1,5 +1,6 @@
 package com.project.market.global.config.security;
 
+import com.project.market.api.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationFailureHandler loginFailureHandler;
     private final UserDetailsServiceImpl userDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -44,6 +46,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .failureHandler(loginFailureHandler)
                 .usernameParameter("email")
+            .and()
+                .oauth2Login()
+                .userInfoEndpoint().userService(customOAuth2UserService)
+                .and()
+                .permitAll()
                 //로그아웃 관련 설정
             .and()
                 .logout()
