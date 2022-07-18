@@ -79,8 +79,8 @@ public class UserDetailsImpl implements UserDetails, OAuth2User {
                 member.getEmail(),
                 member.getPassword(),
                 member.getMemberType(),
-                MemberRole.USER,
-                Collections.singletonList(new SimpleGrantedAuthority(MemberRole.USER.getKey()))
+                member.getRole(),
+                Collections.singletonList(new SimpleGrantedAuthority(member.getRole().getKey()))
         );
     }
 
