@@ -21,6 +21,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.LOGIN_ERROR.getMessage()));
         ;
 
-        return new UserDetailsImpl(member);
+        return UserDetailsImpl.create(member);
     }
 }

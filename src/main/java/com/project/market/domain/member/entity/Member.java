@@ -22,7 +22,6 @@ public class Member {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
@@ -32,7 +31,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberType memberType;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)

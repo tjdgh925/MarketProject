@@ -10,6 +10,8 @@ public enum ErrorCode {
     PASSWORD_NOT_SAME(400, "비밀번호가 다릅니다."),
     NO_MATCHING_MEMBER(400, "해당 회원이 존재하지 않습니다."),
     LOGIN_ERROR(400, "로그인 오류 발생."),
+
+    NOT_VALID_MEMBER_TYPE(400, "유효한 로그인 타비이 아닙니다."),
     ;
 
     ErrorCode(int status, String message) {
