@@ -69,10 +69,10 @@ class MemberServiceTest {
         doReturn(Optional.empty()).when(memberRepository).findByEmail(email);
 
         //when
-        final BusinessException result = assertThrows(BusinessException.class, () -> target.findByEmail(email));
+        Optional<Member> member = target.findByEmail(email);
 
         //then
-        assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_MEMBER.getMessage());
+        assertThat(member).isEmpty();
     }
 
     @Test
@@ -85,6 +85,34 @@ class MemberServiceTest {
 
         //then
         assertThat(result.get()).isEqualTo(member);
+    }
+
+    @Test
+    public void 회원정보수정테스트_실패() throws Exception {
+        //given
+        doReturn(Optional.empty()).when(memberRepository).findByEmail(email);
+
+        //when
+        String changeAddress = "newAddress";
+        String changeName = "newName";
+        final BusinessException result = assertThrows(BusinessException.class, () -> target.update(email, changeAddress, changeName));
+
+        //then
+        assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_MEMBER.getMessage());
+    }
+    @Test
+    public void 회원정보수정테스트_성공() throws Exception {
+        //given
+        doReturn(Optional.of(member)).when(memberRepository).findByEmail(email);
+
+        //when
+        String changeAddress = "newAddress";
+        String changeName = "newName";
+        Member result = target.update(email, changeAddress, changeName);
+
+        //then
+        assertThat(result.getAddress()).isEqualTo(changeAddress);
+        assertThat(result.getMemberName()).isEqualTo(changeName);
     }
 
 }
