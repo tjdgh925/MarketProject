@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html
         xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
         layout:decorate="~{layouts/layout}"
 >
 <th:block layout:fragment="css">
@@ -16,7 +16,7 @@
 
 <div layout:fragment="content">
     <div class="container center_div w-50 mt-4">
-        <form action="/profile" role="form" method="put" th:object="${profileUpdateDto}">
+        <form action="/profile" role="form" method="post" th:object="${profileUpdateDto}">
 
             <div class="form-group mb-3">
                 <label th:for="name">이름</label>
@@ -24,10 +24,9 @@
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
             </div>
 
-            <div class="form-group mb-3">
-                <label th:for="email">이메일주소</label>
-                <input type="email" class="form-control" placeholder="이메일을 입력해주세요" th:field="*{email}" disabled>
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
+            <div class="form-group mb-3" sec:authorize="isAuthenticated()">
+                <label>이메일주소</label>
+                <input type="email" class="form-control" disabled th:value="${#authentication.name}">
             </div>
 
             <div class="form-group mb-3">
