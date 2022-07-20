@@ -49,4 +49,9 @@ public class Member {
         this.password = password;
         this.role = role;
     }
+
+    public void updateInfo(String address, String memberName) {
+        this.address = address;
+        this.memberName = memberName;
+    }
 }

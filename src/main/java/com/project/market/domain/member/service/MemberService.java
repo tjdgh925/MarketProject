@@ -32,4 +32,14 @@ public class MemberService {
     public Optional<Member> findByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
+
+    @Transactional
+    public Member update(String email, String address, String memberName) {
+        Member member = findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));
+
+        member.updateInfo(address, memberName);
+
+        return member;
+    }
 }
