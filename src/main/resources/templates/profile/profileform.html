@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+        layout:decorate="~{layouts/layout}"
+>
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<th:block layout:fragment="script"></th:block>
+
+<div layout:fragment="content">
+    <div class="container center_div w-50 mt-4">
+        <form action="/profile" role="form" method="post" th:object="${profileUpdateDto}">
+
+            <div class="form-group mb-3">
+                <label th:for="name">이름</label>
+                <input type="text" class="form-control" placeholder="이름을 입력해주세요" th:field="*{name}">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
+            </div>
+
+            <div class="form-group mb-3" sec:authorize="isAuthenticated()">
+                <label>이메일주소</label>
+                <input type="email" class="form-control" disabled th:value="${#authentication.name}">
+            </div>
+
+            <div class="form-group mb-3">
+                <label th:for="address">주소</label>
+                <input type="text" class="form-control" placeholder="주소를 입력해주세요" th:field="*{address}">
+                <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
+            </div>
+
+            <div class="mb-3" th:if="${#fields.hasGlobalErrors()}">
+                <p class="field-error text-center" th:each="error : ${#fields.globalErrors()}" th:text="${error}">글로벌 오류 메시지</p>
+            </div>
+
+            <div class="mb-3 text-center">
+                <button type="submit" class="btn btn-primary" style="">회원 정보 수정</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+</html>
