@@ -1,5 +1,6 @@
 package com.project.market.domain.itemImage.entity;
 
+import com.project.market.domain.base.BaseEntity;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.global.config.jpa.BooleanToYNConverter;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Table
 @Getter
 @NoArgsConstructor
-public class ItemImage {
+public class ItemImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

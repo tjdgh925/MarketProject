@@ -1,5 +1,6 @@
 package com.project.market.domain.item.entity;
 
+import com.project.market.domain.base.BaseEntity;
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.member.entity.Member;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Table
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Item {
+public class Item extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
