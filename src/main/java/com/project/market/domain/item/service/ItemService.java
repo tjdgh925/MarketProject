@@ -13,6 +13,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
+    @Transactional
     public Item saveItem(Item item) {
         return itemRepository.save(item);
     }
