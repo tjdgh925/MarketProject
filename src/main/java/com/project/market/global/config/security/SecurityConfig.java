@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .userInfoEndpoint().userService(customOAuth2UserService)
                 .and()
+                .successHandler(oAuth2LoginSuccessHandler)
                 .permitAll()
                 //로그아웃 관련 설정
             .and()
