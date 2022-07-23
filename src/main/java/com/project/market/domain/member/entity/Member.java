@@ -1,5 +1,6 @@
 package com.project.market.domain.member.entity;
 
+import com.project.market.domain.base.BaseTimeEntity;
 import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.constant.MemberType;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,9 +37,6 @@ public class Member {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole role;
-
-    private String refreshToken;
-    private String tokenExpirationTime;
 
     @Builder
     public Member(String email, String memberName,String address, MemberType memberType, String password, MemberRole role) {

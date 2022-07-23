@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "img/**")
@@ -38,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/login", "/register", "/").permitAll() //누구나 접근 가능
                 .antMatchers().hasRole("USER")
-                .antMatchers().hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 //로그인 관련 설정
             .and()
@@ -51,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .userInfoEndpoint().userService(customOAuth2UserService)
                 .and()
-                .successHandler(oAuth2SuccessHandler())
+                .successHandler(oAuth2LoginSuccessHandler)
                 .permitAll()
                 //로그아웃 관련 설정
             .and()
@@ -71,10 +73,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
-
-    @Bean
-    SimpleUrlAuthenticationSuccessHandler oAuth2SuccessHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler("/profile");
     }
 }

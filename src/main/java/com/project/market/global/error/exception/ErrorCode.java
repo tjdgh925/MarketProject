@@ -11,7 +11,13 @@ public enum ErrorCode {
     NO_MATCHING_MEMBER(400, "해당 회원이 존재하지 않습니다."),
     LOGIN_ERROR(400, "로그인 오류 발생."),
 
-    NOT_VALID_MEMBER_TYPE(400, "유효한 로그인 타비이 아닙니다."),
+    NOT_VALID_MEMBER_TYPE(400, "유효한 로그인 타입이 아닙니다."),
+
+    NO_REP_IMAGE(400, "대표 이미지를 등록해주세요."),
+
+    ADD_ITEM_ERROR(400, "상품 등록중에 오류가 발생했습니다.")
+
+
     ;
 
     ErrorCode(int status, String message) {
