@@ -38,9 +38,6 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
-    private String refreshToken;
-    private String tokenExpirationTime;
-
     @Builder
     public Member(String email, String memberName,String address, MemberType memberType, String password, MemberRole role) {
         this.email = email;

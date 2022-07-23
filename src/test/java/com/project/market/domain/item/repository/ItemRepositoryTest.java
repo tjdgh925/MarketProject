@@ -6,10 +6,12 @@ import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
+import com.project.market.global.config.jpa.AuditConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
+@Import(AuditConfig.class)
 class ItemRepositoryTest {
 
     @Autowired
@@ -82,6 +85,6 @@ class ItemRepositoryTest {
         Item result = itemRepository.save(item);
 
         //then
-        assertThat(result).isEqualTo(item);
+        assertThat(result.getItemName()).isEqualTo(item.getItemName());
     }
 }
