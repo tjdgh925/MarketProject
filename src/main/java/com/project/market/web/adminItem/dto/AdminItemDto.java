@@ -3,10 +3,7 @@ package com.project.market.web.adminItem.dto;
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.member.entity.Member;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -17,8 +14,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class AdminItemDto {
-
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
     private String itemName;
 
