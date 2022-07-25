@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminItemServiceTest {
@@ -169,6 +169,31 @@ class AdminItemServiceTest {
                 itemImageDto ->
                         assertThat(itemImageDto.getOriginalImageName()).isEqualTo(itemImages.get(0).getOriginalImageName())
         );
+    }
+
+    @Test
+    public void 상품정보수정테스트_성공() throws Exception {
+        //given
+        List<MultipartFile> itemImageList = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            itemImageList.add(getMockMultiFile(fileName, contentType, filePath));
+        List<ItemImage> itemImages = toEntity(itemImageList);
+
+        Update updateDto = Update.builder()
+                .itemId(1L)
+                .itemName("ItemName")
+                .price(12)
+                .itemDetail("ItemDetails")
+                .stockNumber(11)
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .build();
+
+        //when
+        target.updateItem(updateDto);
+
+        //then
+        verify(itemService, times(1)).updateItem(any(Long.class), any(Item.class));
+
     }
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {

@@ -187,8 +187,6 @@ class ItemImageServiceTest {
 
         //then
         verify(fileService, times(1)).deleteFile(any(String.class));
-        verify(itemImageRepository, times(1)).save(any(ItemImage.class));
-
     }
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {
