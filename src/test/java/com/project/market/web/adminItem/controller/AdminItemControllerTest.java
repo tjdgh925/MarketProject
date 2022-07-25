@@ -25,6 +25,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -56,7 +57,7 @@ class AdminItemControllerTest {
     final String filePath = "src/test/resources/image/testImage.png";
 
 
-    AdminItemDto adminItemDto = AdminItemDto.builder()
+    AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
             .itemName("itemName")
             .price(30)
             .itemDetail("details")
@@ -110,6 +111,22 @@ class AdminItemControllerTest {
 
         //then
         assertThat(result.getClass()).isEqualTo(NestedServletException.class);
+    }
+
+    @Test
+    public void 상품조회뷰반환테스트() throws Exception {
+        //given
+        doReturn(AdminItemDto.Update.builder().build()).when(adminItemService).getItemAndImages(any(long.class));
+        final String url = "/admin/items/1";
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get(url))
+                .andDo(print());
+
+        //then
+        resultActions
+                .andExpect(model().attributeExists("updateItemDto"))
+                .andExpect(view().name("adminitem/updateitemform"));
     }
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {

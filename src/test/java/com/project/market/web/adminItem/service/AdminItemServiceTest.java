@@ -4,6 +4,7 @@ import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.repository.ItemRepository;
 import com.project.market.domain.item.service.ItemService;
+import com.project.market.domain.itemImage.entity.ItemImage;
 import com.project.market.domain.itemImage.service.ItemImageService;
 import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.constant.MemberType;
@@ -14,6 +15,7 @@ import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.infra.image.FileService;
 import com.project.market.web.adminItem.dto.AdminItemDto;
+import com.project.market.web.adminItem.dto.AdminItemDto.Update;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +32,11 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,12 +56,6 @@ class AdminItemServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private ItemRepository itemRepository;
-
-    @Mock
-    private FileService fileService;
 
     @Mock
     private Principal principal;
@@ -97,7 +95,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto adminItemDto = AdminItemDto.builder()
+        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")
@@ -122,7 +120,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto adminItemDto = AdminItemDto.builder()
+        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")
@@ -138,9 +136,55 @@ class AdminItemServiceTest {
         assertThat(result).isEqualTo(item.getId());
     }
 
+    @Test
+    public void 아이템조회테스트_실패() throws Exception {
+        //given
+        doReturn(Item.builder().build()).when(itemService).findItemById(any(long.class));
+        doReturn(null).when(itemImageService).findImagesByItem(any(Item.class));
+
+        //when
+        NullPointerException result = assertThrows(NullPointerException.class, () -> target.getItemAndImages(1L));
+
+        //then
+        assertThat(result.getClass()).isEqualTo(NullPointerException.class);
+    }
+
+    @Test
+    public void 아이템조회테스트_성공() throws Exception {
+        //given
+        List<MultipartFile> itemImageList = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            itemImageList.add(getMockMultiFile(fileName, contentType, filePath));
+        List<ItemImage> itemImages = toEntity(itemImageList);
+
+        doReturn(item).when(itemService).findItemById(any(long.class));
+        doReturn(itemImages).when(itemImageService).findImagesByItem(any(Item.class));
+
+        //when
+        Update updateDto = target.getItemAndImages(1L);
+
+        //then
+        assertThat(updateDto.getItemName()).isEqualTo(item.getItemName());
+        updateDto.getItemImageDtos().stream().forEach(
+                itemImageDto ->
+                        assertThat(itemImageDto.getOriginalImageName()).isEqualTo(itemImages.get(0).getOriginalImageName())
+        );
+    }
+
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(new File(path));
         return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
     }
 
+    private List<ItemImage> toEntity(List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream().map(
+                multipartFile -> ItemImage.builder()
+                        .imageName(multipartFile.getName())
+                        .imageUrl("url")
+                        .isRepImage(false)
+                        .item(item)
+                        .originalImageName(multipartFile.getOriginalFilename())
+                        .build()
+        ).collect(Collectors.toList());
+    }
 }
