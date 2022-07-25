@@ -13,6 +13,7 @@ import com.project.market.web.adminItem.dto.AdminItemDto.Update.ItemImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -61,5 +62,31 @@ public class AdminItemService {
                                 .originalImageName(image.getOriginalImageName())
                                 .build()
         ).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateItem(AdminItemDto.Update updateItemDto) throws IOException {
+        Item updateItem = itemService.updateItem(updateItemDto.getItemId(), updateItemDto.toItemEntity());
+        updateItemImages(updateItem, updateItemDto);
+    }
+
+    private void updateItemImages(Item item, AdminItemDto.Update updateItemDto) throws IOException {
+        List<ItemImage> itemImages = itemImageService.findImagesByItem(item);
+        List<String> originalImageNames = updateItemDto.getOriginalImageNames();
+        List<MultipartFile> itemImageFiles = updateItemDto.getItemImageFiles();
+
+        for (int i = 0; i < itemImages.size(); i++) {
+            ItemImage itemImage = itemImages.get(i);
+            String imageName = originalImageNames.get(i);
+            MultipartFile imageFile = itemImageFiles.get(i);
+
+            if (!imageFile.isEmpty()) {
+                itemImageService.updateItemImage(itemImage, imageFile);
+            } else if(imageName.isEmpty() && !itemImage.getOriginalImageName().isEmpty()){
+                itemImageService.deleteItemImage(itemImage);
+            }
+
+        }
+
     }
 }
