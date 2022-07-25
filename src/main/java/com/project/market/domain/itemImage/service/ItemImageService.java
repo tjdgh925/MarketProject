@@ -51,4 +51,7 @@ public class ItemImageService {
         itemImageRepository.save(itemImage);
     }
 
+    public List<ItemImage> findImagesByItem(Item item) {
+        return itemImageRepository.findByItemOrderById(item);
+    }
 }
