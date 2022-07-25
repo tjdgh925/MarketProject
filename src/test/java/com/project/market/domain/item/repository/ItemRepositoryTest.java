@@ -14,8 +14,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 
 @DataJpaTest
@@ -37,9 +43,19 @@ class ItemRepositoryTest {
             .role(MemberRole.USER)
             .build();
 
+    Item insert = Item.builder()
+            .itemName("상품명")
+            .itemDetail("상품설명")
+            .itemSellStatus(ItemSellStatus.SOLD_OUT)
+            .price(300)
+            .stockNumber(2)
+            .member(member)
+            .build();
+
     @BeforeEach
     public void init() {
         memberRepository.save(member);
+        itemRepository.save(insert);
     }
 
 
@@ -86,5 +102,31 @@ class ItemRepositoryTest {
 
         //then
         assertThat(result.getItemName()).isEqualTo(item.getItemName());
+    }
+
+    @Test
+    public void 상품조회테스트_실패() throws Exception {
+        //given
+        final Long id = 2L;
+
+        //when
+        Item result = itemRepository.findById(id)
+                .orElse(null);
+
+        //then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    public void 상품조회테스트_성공() throws Exception {
+        //given
+        final Long id = 1L;
+
+        //when
+        Item result = itemRepository.findById(id)
+                .orElse(null);
+
+        //then
+        assertThat(result).isEqualTo(insert);
     }
 }
