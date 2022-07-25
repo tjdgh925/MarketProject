@@ -22,11 +22,11 @@ public class ItemImageService {
 
     private final FileService fileService;
     private final String IMAGE_URL_PREFIX = "/images/";
-
+    private final int SIZE = 5;
 
     @Transactional
     public void saveItemImages(List<MultipartFile> itemImageFiles, Item item) throws IOException {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < SIZE; i++) {
             Boolean isRepImage = i == 0;
             saveItemImage(item, itemImageFiles.get(i), isRepImage);
         }
@@ -53,5 +53,29 @@ public class ItemImageService {
 
     public List<ItemImage> findImagesByItem(Item item) {
         return itemImageRepository.findByItemOrderById(item);
+    }
+
+    @Transactional
+    public void updateItemImage(ItemImage itemImage, MultipartFile updateImage) throws IOException {
+
+        if (!itemImage.getImageName().isEmpty()) {
+            fileService.deleteFile(itemImage.getImageUrl());
+        }
+
+        UploadFile uploadFile = fileService.storeFile(updateImage);
+        String originalFileName = uploadFile.getOriginalFileName();
+        String storeFileName = uploadFile.getStoreFileName();
+        String imageUrl = IMAGE_URL_PREFIX + storeFileName;
+
+        itemImage.updateImage(originalFileName, storeFileName, imageUrl);
+
+    }
+
+    @Transactional
+    public void deleteItemImage(ItemImage itemImage) {
+        String uploadPath = fileService.getFullFileUploadPath(itemImage.getImageName());
+        fileService.deleteFile(uploadPath);
+
+        itemImage.refresh();
     }
 }
