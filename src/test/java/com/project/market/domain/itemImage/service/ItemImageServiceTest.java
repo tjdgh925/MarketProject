@@ -24,12 +24,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ItemImageServiceTest {
@@ -118,9 +118,49 @@ class ItemImageServiceTest {
 
     }
 
+    @Test
+    public void 아이템이미지조회테스트_실패() throws Exception {
+        //given
+        doReturn(new ArrayList<ItemImage>()).when(itemImageRepository).findByItemOrderById(item);
+
+        //when
+        List<ItemImage> result = target.findImagesByItem(item);
+
+        //then
+        assertThat(result).isEmpty();
+    }
+
+    @Test
+    public void 아이템이미지조회테스트_성공() throws Exception {
+        //given
+        List<MultipartFile> itemImageList = new ArrayList<>();
+        for (int i = 0; i < 5; i++)
+            itemImageList.add(getMockMultiFile(fileName, contentType, filePath));
+        List<ItemImage> itemImages = toEntity(itemImageList);
+        doReturn(itemImages).when(itemImageRepository).findByItemOrderById(item);
+
+        //when
+        List<ItemImage> result = target.findImagesByItem(item);
+
+        //then
+        assertThat(result).isEqualTo(itemImages);
+    }
+
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(new File(path));
         return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
+    }
+
+    private List<ItemImage> toEntity(List<MultipartFile> multipartFiles) {
+        return multipartFiles.stream().map(
+                multipartFile -> ItemImage.builder()
+                        .imageName(multipartFile.getName())
+                        .imageUrl("url")
+                        .isRepImage(false)
+                        .item(item)
+                        .originalImageName(multipartFile.getOriginalFilename())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
 
