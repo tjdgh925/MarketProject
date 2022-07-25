@@ -15,8 +15,9 @@ public enum ErrorCode {
 
     NO_REP_IMAGE(400, "대표 이미지를 등록해주세요."),
 
-    ADD_ITEM_ERROR(400, "상품 등록중에 오류가 발생했습니다.")
+    ADD_ITEM_ERROR(400, "상품 등록중에 오류가 발생했습니다."),
 
+    NO_MATCHING_ITEM(400, "해당 상품이 존재하지 않습니다."),
 
     ;
 
