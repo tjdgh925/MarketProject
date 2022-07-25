@@ -14,7 +14,7 @@
 
 <div layout:fragment="content" class="container center_div w-50 mt-3 mb-2">
 
-    <form role="form" method="post" th:action="|/admin/items/${itemId}|" enctype="multipart/form-data" th:object="${updateItemDto}">
+    <form role="form" method="post" th:action="|/admin/items/${itemId}|" enctype="multipart/form-data" th:object="${updateAdminItemDto}">
 
         <p class="h2">
             상품 수정
@@ -60,7 +60,7 @@
         <p th:errors="*{itemDetail}" class="field-error">Incorrect data</p>
 
 
-        <th:block th:each="itemImageDto, status: ${updateItemDto.itemImageDtos}">
+        <th:block th:each="itemImageDto, status: ${updateAdminItemDto.itemImageDtos}">
             <p th:id="|original_image_name${status.count}|" th:text="${itemImageDto.originalImageName}">이미지 파일명</p>
             <input type="hidden" name="originalImageNames" th:value="${itemImageDto.originalImageName}" th:id="|originalImageName${status.count}|">
             <div class="input-group mb-3">

@@ -2,7 +2,6 @@ package com.project.market.web.adminItem.service;
 
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
-import com.project.market.domain.item.repository.ItemRepository;
 import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.itemImage.entity.ItemImage;
 import com.project.market.domain.itemImage.service.ItemImageService;
@@ -13,9 +12,8 @@ import com.project.market.domain.member.repository.MemberRepository;
 import com.project.market.domain.member.service.MemberService;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
-import com.project.market.infra.image.FileService;
-import com.project.market.web.adminItem.dto.AdminItemDto;
-import com.project.market.web.adminItem.dto.AdminItemDto.Update;
+import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
+import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,7 +93,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
+        RegisterAdminItemDto adminItemDto = RegisterAdminItemDto.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")
@@ -120,7 +118,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
+        RegisterAdminItemDto adminItemDto = RegisterAdminItemDto.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")
@@ -161,7 +159,7 @@ class AdminItemServiceTest {
         doReturn(itemImages).when(itemImageService).findImagesByItem(any(Item.class));
 
         //when
-        Update updateDto = target.getItemAndImages(1L);
+        UpdateAdminItemDto updateDto = target.getItemAndImages(1L);
 
         //then
         assertThat(updateDto.getItemName()).isEqualTo(item.getItemName());
@@ -179,7 +177,7 @@ class AdminItemServiceTest {
             itemImageList.add(getMockMultiFile(fileName, contentType, filePath));
         List<ItemImage> itemImages = toEntity(itemImageList);
 
-        Update updateDto = Update.builder()
+        UpdateAdminItemDto updateDto = UpdateAdminItemDto.builder()
                 .itemId(1L)
                 .itemName("ItemName")
                 .price(12)
