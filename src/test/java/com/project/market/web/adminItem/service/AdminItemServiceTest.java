@@ -97,7 +97,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto adminItemDto = AdminItemDto.builder()
+        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")
@@ -122,7 +122,7 @@ class AdminItemServiceTest {
         for (int i = 0; i < 5; i++)
             imageFiles.add(getMockMultiFile(fileName, contentType, filePath));
 
-        AdminItemDto adminItemDto = AdminItemDto.builder()
+        AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
                 .itemName("ItemName")
                 .price(12)
                 .itemDetail("ItemDetails")

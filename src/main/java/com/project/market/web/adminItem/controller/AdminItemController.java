@@ -32,7 +32,7 @@ public class AdminItemController {
     @PostMapping(value = "/new")
     public String itemNew(
             Principal principal,
-            @Valid @ModelAttribute AdminItemDto adminItemDto,
+            @Valid @ModelAttribute AdminItemDto.Register adminItemDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {

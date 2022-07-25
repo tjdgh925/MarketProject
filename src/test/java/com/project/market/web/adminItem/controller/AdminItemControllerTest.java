@@ -56,7 +56,7 @@ class AdminItemControllerTest {
     final String filePath = "src/test/resources/image/testImage.png";
 
 
-    AdminItemDto adminItemDto = AdminItemDto.builder()
+    AdminItemDto.Register adminItemDto = AdminItemDto.Register.builder()
             .itemName("itemName")
             .price(30)
             .itemDetail("details")

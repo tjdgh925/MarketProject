@@ -25,7 +25,7 @@ public class AdminItemService {
     private final MemberService memberService;
 
     @Transactional
-    public Long addNewAdminItem(AdminItemDto adminItemDto, Principal principal) throws IOException {
+    public Long addNewAdminItem(AdminItemDto.Register adminItemDto, Principal principal) throws IOException {
         Member member = findMemberByPrincipal(principal);
         Item item = adminItemDto.toItemEntity(member);
         itemService.saveItem(item);

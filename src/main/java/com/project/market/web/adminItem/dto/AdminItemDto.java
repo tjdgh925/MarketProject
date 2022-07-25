@@ -11,45 +11,50 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
 public class AdminItemDto {
-    @NotBlank(message = "상품명은 필수 입력 값입니다.")
-    private String itemName;
 
-    @NotNull(message = "가격은 필수 입력 값입니다.")
-    private Integer price;
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    public static class Register {
 
-    @NotEmpty(message = "상품 상세는 필수 입력 값입니다.")
-    private String itemDetail;
+        @NotBlank(message = "상품명은 필수 입력 값입니다.")
+        private String itemName;
 
-    @NotNull(message = "재고는 필수 입력 값입니다.")
-    private Integer stockNumber;
+        @NotNull(message = "가격은 필수 입력 값입니다.")
+        private Integer price;
 
-    private ItemSellStatus itemSellStatus;
+        @NotEmpty(message = "상품 상세는 필수 입력 값입니다.")
+        private String itemDetail;
 
-    private List<MultipartFile> itemImageFiles;
+        @NotNull(message = "재고는 필수 입력 값입니다.")
+        private Integer stockNumber;
 
-    @Builder
-    public AdminItemDto(String itemName, Integer price, String itemDetail, Integer stockNumber, ItemSellStatus itemSellStatus, List<MultipartFile> itemImageFiles) {
-        this.itemName = itemName;
-        this.price = price;
-        this.itemDetail = itemDetail;
-        this.stockNumber = stockNumber;
-        this.itemSellStatus = itemSellStatus;
-        this.itemImageFiles = itemImageFiles;
-    }
+        private ItemSellStatus itemSellStatus;
 
-    public Item toItemEntity(Member member) {
-        return Item.builder()
-                .itemName(itemName)
-                .price(price)
-                .itemDetail(itemDetail)
-                .stockNumber(stockNumber)
-                .itemSellStatus(itemSellStatus)
-                .member(member)
-                .build();
+        private List<MultipartFile> itemImageFiles;
+
+        @Builder
+        public Register(String itemName, Integer price, String itemDetail, Integer stockNumber, ItemSellStatus itemSellStatus, List<MultipartFile> itemImageFiles) {
+            this.itemName = itemName;
+            this.price = price;
+            this.itemDetail = itemDetail;
+            this.stockNumber = stockNumber;
+            this.itemSellStatus = itemSellStatus;
+            this.itemImageFiles = itemImageFiles;
+        }
+
+        public Item toItemEntity(Member member) {
+            return Item.builder()
+                    .itemName(itemName)
+                    .price(price)
+                    .itemDetail(itemDetail)
+                    .stockNumber(stockNumber)
+                    .itemSellStatus(itemSellStatus)
+                    .member(member)
+                    .build();
+        }
     }
 }
+
