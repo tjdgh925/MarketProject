@@ -57,9 +57,9 @@ public class ItemImage extends BaseEntity {
     }
 
     public void refresh() {
-        this.originalImageName = null;
-        this.imageName = null;
-        this.imageUrl = null;
+        this.originalImageName = "";
+        this.imageName = "";
+        this.imageUrl = "";
         this.isRepImage = false;
     }
 }
