@@ -107,7 +107,7 @@ class ItemRepositoryTest {
     @Test
     public void 상품조회테스트_실패() throws Exception {
         //given
-        final Long id = 2L;
+        final Long id = 3L;
 
         //when
         Item result = itemRepository.findById(id)
