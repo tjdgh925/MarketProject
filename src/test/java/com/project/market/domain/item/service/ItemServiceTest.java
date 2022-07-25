@@ -111,4 +111,53 @@ class ItemServiceTest {
         //then
         assertThat(item).isEqualTo(result);
     }
+
+    @Test
+    public void 상품수정기능테스트_실패() throws Exception {
+        //given
+        doReturn(Optional.empty()).when(itemRepository).findById(any(Long.class));
+        final Item update = Item.builder()
+                .itemName("상품명")
+                .itemDetail("상품설명")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .price(300)
+                .stockNumber(2)
+                .member(member)
+                .build();
+
+        //when
+        BusinessException result = assertThrows(BusinessException.class, () -> target.updateItem(1L, update));
+
+        //then
+        assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_ITEM.getMessage());
+    }
+
+    @Test
+    public void 상품수정기능테스트_성공() throws Exception {
+        //given
+        final Item saved = Item.builder()
+                .itemName("before")
+                .itemDetail("before")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .price(10)
+                .stockNumber(1)
+                .member(member)
+                .build();
+
+        final Item change = Item.builder()
+                .itemName("after")
+                .itemDetail("after")
+                .itemSellStatus(ItemSellStatus.SELL)
+                .price(20)
+                .stockNumber(2)
+                .build();
+
+        doReturn(Optional.of(saved)).when(itemRepository).findById(any(Long.class));
+
+        //when
+        Item result = target.updateItem(1L, change);
+
+        //then
+        assertThat(result.getItemName()).isEqualTo("after");
+    }
 }
