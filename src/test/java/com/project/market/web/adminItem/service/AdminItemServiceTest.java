@@ -138,7 +138,7 @@ class AdminItemServiceTest {
     public void 아이템조회테스트_실패() throws Exception {
         //given
         doReturn(Item.builder().build()).when(itemService).findItemById(any(long.class));
-        doReturn(null).when(itemImageService).findImagesByItem(any(Item.class));
+//        doReturn(null).when(itemImageService).findImagesByItem(any(Item.class));
 
         //when
         NullPointerException result = assertThrows(NullPointerException.class, () -> target.getItemAndImages(1L));
@@ -150,13 +150,22 @@ class AdminItemServiceTest {
     @Test
     public void 아이템조회테스트_성공() throws Exception {
         //given
+
         List<MultipartFile> itemImageList = new ArrayList<>();
         for (int i = 0; i < 5; i++)
             itemImageList.add(getMockMultiFile(fileName, contentType, filePath));
         List<ItemImage> itemImages = toEntity(itemImageList);
+        Item temp = Item.builder()
+                .itemName("상품명")
+                .itemDetail("상품설명")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .price(300)
+                .stockNumber(2)
+                .member(member)
+                .imageList(itemImages)
+                .build();
 
-        doReturn(item).when(itemService).findItemById(any(long.class));
-        doReturn(itemImages).when(itemImageService).findImagesByItem(any(Item.class));
+        doReturn(temp).when(itemService).findItemById(any(long.class));
 
         //when
         UpdateAdminItemDto updateDto = target.getItemAndImages(1L);

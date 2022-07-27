@@ -1,6 +1,7 @@
 package com.project.market.web.adminItem.service;
 
 import com.project.market.domain.item.entity.Item;
+import com.project.market.domain.item.repository.ItemRepository;
 import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.itemImage.entity.ItemImage;
 import com.project.market.domain.itemImage.service.ItemImageService;
@@ -8,9 +9,12 @@ import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.service.MemberService;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
 import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +58,7 @@ public class AdminItemService {
     }
 
     private List<UpdateAdminItemDto.ItemImageDto> getItemImageDtos(Item item) {
-        List<ItemImage> imagesList = itemImageService.findImagesByItem(item);
+        List<ItemImage> imagesList = item.getImageList();
         return imagesList.stream().map(
                 image ->
                         UpdateAdminItemDto.ItemImageDto.builder()

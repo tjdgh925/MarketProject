@@ -2,6 +2,7 @@ package com.project.market.domain.item.entity;
 
 import com.project.market.domain.base.BaseEntity;
 import com.project.market.domain.item.constant.ItemSellStatus;
+import com.project.market.domain.itemImage.entity.ItemImage;
 import com.project.market.domain.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table
@@ -41,14 +43,18 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ItemImage> imageList;
+
     @Builder
-    public Item(String itemName, ItemSellStatus itemSellStatus, int price, int stockNumber, String itemDetail, Member member) {
+    public Item(String itemName, ItemSellStatus itemSellStatus, int price, int stockNumber, String itemDetail, Member member, List<ItemImage> imageList) {
         this.itemName = itemName;
         this.itemSellStatus = itemSellStatus;
         this.price = price;
         this.stockNumber = stockNumber;
         this.itemDetail = itemDetail;
         this.member = member;
+        this.imageList = imageList;
     }
 
     public void update(Item updateItem) {
