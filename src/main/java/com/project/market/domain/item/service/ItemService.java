@@ -27,4 +27,11 @@ public class ItemService {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_ITEM));
     }
+
+    @Transactional
+    public Item updateItem(Long itemId, Item updateItem) {
+        Item item = findItemById(itemId);
+        item.update(updateItem);
+        return item;
+    }
 }

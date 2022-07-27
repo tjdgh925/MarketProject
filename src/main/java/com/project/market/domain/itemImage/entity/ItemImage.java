@@ -49,4 +49,17 @@ public class ItemImage extends BaseEntity {
     public void setItem(Item item) {
         this.item = item;
     }
+
+    public void updateImage(String originalFileName, String storeFileName, String imageUrl) {
+        this.originalImageName = originalFileName;
+        this.imageName = storeFileName;
+        this.imageUrl = imageUrl;
+    }
+
+    public void refresh() {
+        this.originalImageName = "";
+        this.imageName = "";
+        this.imageUrl = "";
+        this.isRepImage = false;
+    }
 }

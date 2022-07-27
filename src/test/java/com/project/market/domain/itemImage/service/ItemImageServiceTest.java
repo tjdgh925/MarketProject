@@ -10,6 +10,7 @@ import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
 import com.project.market.infra.image.FileService;
+import com.project.market.infra.image.UploadFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,7 @@ class ItemImageServiceTest {
 
     @Mock
     private FileService fileService;
+
 
     final Member member = Member.builder()
             .email("test@email.com")
@@ -144,6 +146,47 @@ class ItemImageServiceTest {
 
         //then
         assertThat(result).isEqualTo(itemImages);
+    }
+
+    @Test
+    public void 상품이미지수정테스트_실패() throws Exception {
+        //given
+        final ItemImage itemImage = ItemImage.builder()
+                .imageName("22")
+                .imageUrl("/url")
+                .isRepImage(false)
+                .originalImageName("original")
+                .item(item)
+                .build();
+        MockMultipartFile updateFile = getMockMultiFile("newFile", contentType, filePath);
+        doReturn(null).when(fileService).storeFile(any(MultipartFile.class));
+
+        //when
+        NullPointerException result = assertThrows(NullPointerException.class, () -> target.updateItemImage(itemImage, updateFile));
+
+        //then
+        assertThat(result.getClass()).isEqualTo(NullPointerException.class);
+    }
+
+    @Test
+    public void 상품이미지수정테스트_성공() throws Exception {
+        //given
+        final ItemImage itemImage = ItemImage.builder()
+                .imageName("22")
+                .imageUrl("/url")
+                .isRepImage(false)
+                .originalImageName("original")
+                .item(item)
+                .build();
+        MockMultipartFile updateFile = getMockMultiFile("newFile", contentType, filePath);
+        doReturn(new UploadFile("newFile","newName","newUrl"))
+                .when(fileService).storeFile(any(MultipartFile.class));
+
+        //when
+        target.updateItemImage(itemImage, updateFile);
+
+        //then
+        verify(fileService, times(1)).deleteFile(any(String.class));
     }
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {
