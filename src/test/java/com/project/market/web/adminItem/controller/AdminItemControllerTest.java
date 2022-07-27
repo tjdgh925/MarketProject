@@ -2,6 +2,7 @@ package com.project.market.web.adminItem.controller;
 
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
+import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import com.project.market.web.adminItem.service.AdminItemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -83,7 +84,7 @@ class AdminItemControllerTest {
 
         //then
         resultActions
-                .andExpect(model().attributeExists("adminItemDto"))
+                .andExpect(model().attributeExists("registerAdminItemDto"))
                 .andExpect(view().name(view));
     }
 
@@ -116,7 +117,7 @@ class AdminItemControllerTest {
     @Test
     public void 상품조회뷰반환테스트() throws Exception {
         //given
-        doReturn(RegisterAdminItemDto.builder().build()).when(adminItemService).getItemAndImages(any(long.class));
+        doReturn(UpdateAdminItemDto.builder().build()).when(adminItemService).getItemAndImages(any(long.class));
         final String url = "/admin/items/1";
 
         //when
@@ -125,7 +126,7 @@ class AdminItemControllerTest {
 
         //then
         resultActions
-                .andExpect(model().attributeExists("updateItemDto"))
+                .andExpect(model().attributeExists("updateAdminItemDto"))
                 .andExpect(view().name("adminitem/updateitemform"));
     }
 
