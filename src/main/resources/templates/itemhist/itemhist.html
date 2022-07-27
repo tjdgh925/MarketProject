@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .content-mg {
+            margin-left: 30%;
+            margin-right: 30%;
+            margin-top: 2%;
+            margin-bottom: 100px;
+        }
+
+        .repImgDiv {
+            margin-right: 15px;
+            margin-left: 15px;
+            height: auto;
+        }
+
+        .repImg {
+            height: 100px;
+            width: 100px;
+        }
+
+        .card {
+            width: 750px;
+            height: 100%;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .fs18 {
+            font-size: 18px
+        }
+
+        .fs24 {
+            font-size: 24px
+        }
+
+        .no-deco{
+            text-decoration: none;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="content-mg">
+
+    <h2 class="mb-4">
+        상품 목록
+    </h2>
+
+    <div th:each="item : ${items.getContent()}" class="mb-5">
+        <div class="d-flex mb-3 align-self-center">
+            <h4 th:text="|${#temporals.format(item.registerTime, 'yyyy-MM-dd HH:mm:ss')} 등록|"></h4>
+        </div>
+        <a th:href="'/admin/items/' +${item.itemId}" class="card d-flex no-deco text-dark">
+            <div class="d-flex mb-3">
+                <div class="repImgDiv">
+                    <img th:src="${item.imageUrl}" class="rounded repImg" th:alt="${item.itemName}">
+                </div>
+                <div class="align-self-center w-75">
+                    <div class="fs24 font-weight-bold">
+                        <span th:text="${item.itemName}"></span>
+                        <span th:if="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">판매중</span>
+                        <span th:unless="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">품절</span>
+                    </div>
+                    <div class="fs18 font-weight-light">
+                        <span th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')} 원, |"></span>
+                        <span th:text="|${item.stockNumber} 개|"></span>
+                    </div>
+                </div>
+            </div>
+            <span th:text="${item.itemDetail}" class="fs18 font-weight-light"></span>
+        </a>
+    </div>
+
+    <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:classappend="${items.number eq 0}?'disabled':''">
+                <a th:href="@{/itemhist(page=${items.number}-1)}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                th:classappend="${items.number eq page-1}?'active':''">
+                <a th:href="@{/itemhist(page=${page-1})}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${items.number+1 ge items.totalPages}?'disabled':''">
+                <a th:href="@{/itemhist(page=${items.number+1})}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+</html>
