@@ -1,10 +1,14 @@
 package com.project.market.web.adminItem.controller;
 
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
 import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import com.project.market.web.adminItem.service.AdminItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -15,21 +19,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/items")
+@RequestMapping("/admin")
 public class AdminItemController {
 
     private final AdminItemService adminItemService;
 
-    @GetMapping("/new")
+    @GetMapping("/items/new")
     public String getAdminItemView(Model model) {
         model.addAttribute("registerAdminItemDto", new RegisterAdminItemDto());
         return "adminitem/registeritemform";
     }
 
-    @PostMapping(value = "/new")
+    @PostMapping(value = "/items/new")
     public String itemNew(
             Principal principal,
             @Valid @ModelAttribute RegisterAdminItemDto registerAdminItemDto,
@@ -57,7 +62,7 @@ public class AdminItemController {
     }
 
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/items/{itemId}")
     public String itemEdit(
             @PathVariable Long itemId,
             Model model
@@ -67,7 +72,7 @@ public class AdminItemController {
         return "adminitem/updateitemform";
     }
 
-    @PostMapping("/{itemId}")
+    @PostMapping("/items/{itemId}")
     public String updateItem(
             @PathVariable Long itemId,
             @ModelAttribute UpdateAdminItemDto updateAdminItemDto,
@@ -96,4 +101,19 @@ public class AdminItemController {
         return "redirect:/admin/items/{itemId}";
     }
 
+    @GetMapping("/itemhist")
+    public String getAdminItemHistory(
+            Optional<Integer> page, Model model, Principal principal
+    ) {
+
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+
+        Page<AdminItemHistDto> adminIemHistDtos = adminItemService.getItemHistory(principal, pageable);
+
+        model.addAttribute("items", adminIemHistDtos);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
+
+        return "itemhist/itemhist";
+    }
 }

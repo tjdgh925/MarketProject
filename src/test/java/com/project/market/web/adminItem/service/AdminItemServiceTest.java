@@ -12,6 +12,7 @@ import com.project.market.domain.member.repository.MemberRepository;
 import com.project.market.domain.member.service.MemberService;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
 import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -201,6 +206,39 @@ class AdminItemServiceTest {
         //then
         verify(itemService, times(1)).updateItem(any(Long.class), any(Item.class));
 
+    }
+
+    @Test
+    public void 상품정보페이지조회테스트_실패() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        doReturn(null).when(principal).getName();
+
+        //when
+        BusinessException result = assertThrows(BusinessException.class, () -> target.getItemHistory(principal, pageable));
+
+        //then
+        assertThat(result).isInstanceOf(BusinessException.class);
+    }
+
+    @Test
+    public void 상품정보페이지조회테스트_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        doReturn("test").when(principal).getName();
+        doReturn(Optional.of(member)).when(memberService).findByEmail("test");
+
+        List<AdminItemHistDto> hist = new ArrayList<>();
+        hist.add(AdminItemHistDto.builder()
+                .build());
+        PageImpl<AdminItemHistDto> page = new PageImpl<>(hist);
+        doReturn(page).when(itemService).getAdminItemHistory(member, pageable);
+
+        //when
+        Page<AdminItemHistDto> result = target.getItemHistory(principal, pageable);
+
+        //then
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {

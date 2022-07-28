@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,8 +90,13 @@ public class AdminItemService {
             } else if(imageName.isEmpty() && !itemImage.getOriginalImageName().isEmpty()){
                 itemImageService.deleteItemImage(itemImage);
             }
-
         }
+    }
+    public Page<AdminItemHistDto> getItemHistory(Principal principal, Pageable pageable) {
 
+        Member member = memberService.findByEmail(principal.getName())
+                .orElseThrow(()-> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));
+
+        return itemService.getAdminItemHistory(member, pageable);
     }
 }

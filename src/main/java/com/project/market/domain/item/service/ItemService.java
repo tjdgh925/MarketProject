@@ -2,9 +2,13 @@ package com.project.market.domain.item.service;
 
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.repository.ItemRepository;
+import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +37,9 @@ public class ItemService {
         Item item = findItemById(itemId);
         item.update(updateItem);
         return item;
+    }
+
+    public Page<AdminItemHistDto> getAdminItemHistory(Member member, Pageable pageable) {
+        return itemRepository.getItemHistPage(member, pageable);
     }
 }
