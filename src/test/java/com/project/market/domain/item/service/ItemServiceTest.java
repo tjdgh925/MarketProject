@@ -8,12 +8,20 @@ import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -159,5 +167,36 @@ class ItemServiceTest {
 
         //then
         assertThat(result.getItemName()).isEqualTo("after");
+    }
+
+    @Test
+    public void 상품정보페이지조회테스트_실패() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        doReturn(null).when(itemRepository).getItemHistPage(member, pageable);
+
+
+        //when
+        Page<AdminItemHistDto> result = target.getAdminItemHistory(member, pageable);
+
+        //then
+        assertThat(result).isNull();
+    }
+    
+    @Test
+    public void 상품정보페이지조회테스트_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        List<AdminItemHistDto> hist = new ArrayList<>();
+        hist.add(AdminItemHistDto.builder()
+                .build());
+        PageImpl<AdminItemHistDto> page = new PageImpl<>(hist);
+        doReturn(page).when(itemRepository).getItemHistPage(member, pageable);
+        
+        //when
+        Page<AdminItemHistDto> result = target.getAdminItemHistory(member, pageable);
+
+        //then
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 }
