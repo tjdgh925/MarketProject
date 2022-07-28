@@ -1,5 +1,6 @@
 package com.project.market.domain.item.repository;
 
+import com.project.market.TestConfig;
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.member.constant.MemberRole;
@@ -7,12 +8,16 @@ import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
 import com.project.market.global.config.jpa.AuditConfig;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.swing.text.html.Option;
 import java.util.Optional;
@@ -25,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 
 @DataJpaTest
-@Import(AuditConfig.class)
+@Import({AuditConfig.class, TestConfig.class})
 class ItemRepositoryTest {
 
     @Autowired
@@ -33,6 +38,10 @@ class ItemRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ItemRepositoryImpl itemRepositoryImpl;
+
 
     final Member member = Member.builder()
             .email("test@email.com")
@@ -128,5 +137,29 @@ class ItemRepositoryTest {
 
         //then
         assertThat(result).isEqualTo(insert);
+    }
+
+    @Test
+    public void 상품과이미지조회테스트_실패() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+
+        //when
+        IllegalArgumentException result = assertThrows(IllegalArgumentException.class, () -> itemRepositoryImpl.getItemHistPage(null, pageable));
+
+        //then
+        assertThat(result).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void 상품과이미지조회테스트_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+
+        //when
+        Page<AdminItemHistDto> result = itemRepositoryImpl.getItemHistPage(member, pageable);
+
+        //then
+        assertThat(result).isNotNull();
     }
 }
