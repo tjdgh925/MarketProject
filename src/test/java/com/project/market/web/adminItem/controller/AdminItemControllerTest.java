@@ -1,6 +1,9 @@
 package com.project.market.web.adminItem.controller;
 
 import com.project.market.domain.item.constant.ItemSellStatus;
+import com.project.market.domain.member.entity.Member;
+import com.project.market.domain.member.service.MemberService;
+import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.adminItem.dto.RegisterAdminItemDto;
 import com.project.market.web.adminItem.dto.UpdateAdminItemDto;
 import com.project.market.web.adminItem.service.AdminItemService;
@@ -10,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,10 +29,12 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,6 +53,9 @@ class AdminItemControllerTest {
 
     @Mock
     private Principal principal;
+
+    @Mock
+    MemberService memberService;
 
     private MockMvc mockMvc;
 
@@ -129,6 +140,35 @@ class AdminItemControllerTest {
                 .andExpect(model().attributeExists("updateAdminItemDto"))
                 .andExpect(view().name("adminitem/updateitemform"));
     }
+
+    @Test
+    public void 상품페이지조회테스트_성공() throws Exception {
+        //given
+        final String url = "/admin/itemhist";
+        Pageable pageable = PageRequest.of(0, 6);
+
+        doReturn("test").when(principal).getName();
+
+        List<AdminItemHistDto> hist = new ArrayList<>();
+        hist.add(AdminItemHistDto.builder()
+                .build());
+        PageImpl<AdminItemHistDto> page = new PageImpl<>(hist);
+        doReturn(page).when(adminItemService).getItemHistory(principal,pageable);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get(url)
+                .param("page", String.valueOf(0))
+                .param("model", String.valueOf(page))
+                .principal(principal)
+        ).andDo(print());
+
+        //then
+        resultActions.andExpect(model().attributeExists("items"));
+
+
+    }
+
+
 
     private MockMultipartFile getMockMultiFile(String fileName, String contentType, String path) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(new File(path));
