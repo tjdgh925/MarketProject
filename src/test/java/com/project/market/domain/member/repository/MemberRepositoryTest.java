@@ -1,15 +1,19 @@
 package com.project.market.domain.member.repository;
 
+import com.project.market.TestConfig;
 import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
+import com.project.market.global.config.jpa.AuditConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import({AuditConfig.class, TestConfig.class})
 class MemberRepositoryTest {
 
     @Autowired
