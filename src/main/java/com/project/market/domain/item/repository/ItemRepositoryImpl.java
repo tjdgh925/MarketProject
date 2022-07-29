@@ -71,10 +71,10 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         )).from(item)
                 .join(item.imageList, itemImage)
                 .on(itemImage.isRepImage.eq(true))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .where(item.itemSellStatus.eq(ItemSellStatus.SELL)
                         .and(eqItemSearch(searchQuery)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long size = queryFactory.select(item.count())
@@ -90,7 +90,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private BooleanExpression eqItemSearch(String searchQuery) {
-        if (searchQuery.equals("")) {
+        if (StringUtils.isEmpty(searchQuery)) {
             return null;
         }
         return item.itemDetail.contains(searchQuery)
