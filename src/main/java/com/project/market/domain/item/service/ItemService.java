@@ -6,6 +6,7 @@ import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.web.adminItem.dto.AdminItemHistDto;
+import com.project.market.web.main.dto.MainItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +42,9 @@ public class ItemService {
 
     public Page<AdminItemHistDto> getAdminItemHistory(Member member, Pageable pageable) {
         return itemRepository.getItemHistPage(member, pageable);
+    }
+
+    public Page<MainItemDto> getSearchMainItem(String searchQuery, Pageable pageable) {
+        return itemRepository.getMainItemPage(searchQuery, pageable);
     }
 }
