@@ -34,12 +34,24 @@
             font-size: 18px
         }
 
+        .fs20 {
+            font-size: 20px
+        }
+
         .fs24 {
             font-size: 24px
         }
 
         .no-deco{
             text-decoration: none;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .blue{
+            color: blue;
         }
     </style>
 </th:block>
@@ -60,10 +72,10 @@
                     <img th:src="${item.imageUrl}" class="rounded repImg" th:alt="${item.itemName}">
                 </div>
                 <div class="align-self-center w-75">
-                    <div class="fs24 font-weight-bold">
-                        <span th:text="${item.itemName}"></span>
-                        <span th:if="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">판매중</span>
-                        <span th:unless="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">품절</span>
+                    <div>
+                        <span class="fs24 font-weight-bold" th:text="${item.itemName}"></span>
+                        <span class="fs20 font-weight-light blue" th:if="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">판매중</span>
+                        <span class="fs20 font-weight-light red" th:unless="${item.itemSellStatus == T(com.project.market.domain.item.constant.ItemSellStatus).SELL}">품절</span>
                     </div>
                     <div class="fs18 font-weight-light">
                         <span th:text="|${#numbers.formatInteger(item.price, 0, 'COMMA')} 원, |"></span>

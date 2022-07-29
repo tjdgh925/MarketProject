@@ -14,7 +14,10 @@
                             <a class="nav-link" th:href="@{/admin/items/new}" sec:authorize="hasRole('ADMIN')">상품 등록</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/orderhist}">구매이력</a>
+                            <a class="nav-link" th:href="@{/orderhist}" sec:authorize="hasRole('USER')">구매 이력</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/itemhist}" sec:authorize="hasRole('ADMIN')">상품 관리</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()">로그인</a>
