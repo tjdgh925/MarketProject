@@ -15,5 +15,5 @@
 [ERD](https://www.erdcloud.com/d/zvNAL2pdfWq5neAMo)
 
 ## 📈개발과정 정리
-[블로그 - 쇼핑몰 만들기](https://tjdgh925.tistory.com/89?category=988004)
+[블로그 - 쇼핑몰 만들기](https://tjdgh925.tistory.com/category/개인%20프로젝트/쇼핑몰%20만들기)
 
