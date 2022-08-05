@@ -48,6 +48,7 @@ public class ItemService {
         return itemRepository.getMainItemPage(searchQuery, pageable);
     }
 
+    @Transactional
     public void reduceStock(Item item, int amount) throws Exception {
         int stock = item.getStockNumber();
         if (stock < amount) {

@@ -1,6 +1,7 @@
 package com.project.market.domain.order.service;
 
 import com.project.market.domain.item.entity.Item;
+import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.order.entity.Order;
 import com.project.market.domain.order.entity.OrderItem;
@@ -22,6 +23,7 @@ public class OrderService {
     @Transactional
     public void registerOrder(Member member, List<OrderItem> orderItemList) {
         Order order = Order.createOrder(member, orderItemList, LocalDateTime.now());
+
         ordersRepository.save(order);
     }
 
