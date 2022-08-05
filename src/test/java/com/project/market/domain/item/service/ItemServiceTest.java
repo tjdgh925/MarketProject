@@ -234,4 +234,46 @@ class ItemServiceTest {
         assertThat(result.getTotalPages()).isEqualTo(1);
 
     }
+
+    @Test
+    public void 상품재고감소테스트_실패() throws Exception {
+        //given
+        final Item item = Item.builder()
+                .itemName("before")
+                .itemDetail("before")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .price(10)
+                .stockNumber(1)
+                .member(member)
+                .build();
+        int amount = 2;
+
+        //when
+        Exception result = assertThrows(Exception.class, () -> target.reduceStock(item, amount));
+
+
+        //then
+        assertThat(result).isInstanceOf(Exception.class);
+    }
+
+    @Test
+    public void 상품재고감소테스트_성공() throws Exception {
+        //given
+        Item item = Item.builder()
+                .itemName("before")
+                .itemDetail("before")
+                .itemSellStatus(ItemSellStatus.SOLD_OUT)
+                .price(10)
+                .stockNumber(10)
+                .member(member)
+                .build();
+        int amount = 2;
+
+        //when
+        target.reduceStock(item, amount);
+
+
+        //then
+        assertThat(item.getStockNumber()).isEqualTo(8);
+    }
 }
