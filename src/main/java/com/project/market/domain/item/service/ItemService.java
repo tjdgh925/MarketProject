@@ -47,4 +47,13 @@ public class ItemService {
     public Page<MainItemDto> getSearchMainItem(String searchQuery, Pageable pageable) {
         return itemRepository.getMainItemPage(searchQuery, pageable);
     }
+
+    public void reduceStock(Item item, int amount) throws Exception {
+        int stock = item.getStockNumber();
+        if (stock < amount) {
+            throw new Exception(ErrorCode.NOT_ENOUGH_STOCK.getMessage() + "(현재 재고 수량" + item.getStockNumber() + ")");
+        }
+
+        item.reduceStock(amount);
+    }
 }
