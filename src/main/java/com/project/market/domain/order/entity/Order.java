@@ -47,5 +47,21 @@ public class Order extends BaseEntity {
         this.member = member;
     }
 
+    public static Order createOrder(Member member, List<OrderItem> orderItemList, LocalDateTime orderTime) {
+        Order order = Order.builder()
+                .orderStatus(OrderStatus.ORDER)
+                .member(member)
+                .orderTime(orderTime)
+                .build();
+        for (OrderItem orderItem : orderItemList) {
+            order.addOrderItem(orderItem);
+        }
+        return order;
+    }
+
+    private void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }
 

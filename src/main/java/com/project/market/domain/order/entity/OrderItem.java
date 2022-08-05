@@ -38,4 +38,8 @@ public class OrderItem extends BaseEntity {
         this.orderPrice = orderPrice;
         this.item = item;
     }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }
