@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.validation.ConstraintViolationException;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,10 +60,17 @@ class OrderItemRepositoryTest {
             .member(member)
             .build();
 
+     OrderItem insert = OrderItem.builder()
+            .orderPrice(300)
+            .count(3)
+            .item(item)
+            .build();
+
     @BeforeEach
     public void init() {
         memberRepository.save(member);
         itemRepository.save(item);
+        orderItemRepository.save(insert);
     }
 
     @Test
@@ -92,6 +102,53 @@ class OrderItemRepositoryTest {
 
         //then
         assertThat(result).isEqualTo(orderItem);
+    }
+
+    @Test
+    public void 주문조회테스트_실패() throws Exception {
+        //given
+
+        //when
+        Optional<OrderItem> result = orderItemRepository.findById(2L);
+
+        //then
+        assertThat(result).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    public void 주문조회테스트_성공() throws Exception {
+        //given
+
+        //when
+        Optional<OrderItem> result = orderItemRepository.findById(insert.getId());
+
+        //then
+        assertThat(result).isEqualTo(Optional.of(insert));
+    }
+
+    @Test
+    public void 주문삭제테스트_실패() throws Exception {
+        //given
+
+
+        //when
+        EmptyResultDataAccessException result = assertThrows(EmptyResultDataAccessException.class, () -> orderItemRepository.deleteById(2L));
+
+        //then
+        assertThat(result).isInstanceOf(EmptyResultDataAccessException.class);
+    }
+
+    @Test
+    public void 주문삭제테스트_성공() throws Exception {
+        //given
+
+
+        //when
+        orderItemRepository.deleteById(insert.getId());
+        Optional<OrderItem> result = orderItemRepository.findById(insert.getId());
+
+        //then
+        assertThat(result).isEqualTo(Optional.empty());
     }
 
 }
