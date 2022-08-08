@@ -1,6 +1,7 @@
 package com.project.market.domain.order.entity;
 
 import com.project.market.domain.base.BaseEntity;
+import com.project.market.domain.cart.entity.Cart;
 import com.project.market.domain.item.entity.Item;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,9 +29,13 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "item_id",  nullable = false)
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @Builder
     public OrderItem(int count, int orderPrice, Item item) {
