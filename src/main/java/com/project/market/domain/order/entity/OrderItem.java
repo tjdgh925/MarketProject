@@ -47,4 +47,8 @@ public class OrderItem extends BaseEntity {
     public void setOrder(Order order) {
         this.order = order;
     }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

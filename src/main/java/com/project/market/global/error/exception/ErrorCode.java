@@ -22,6 +22,8 @@ public enum ErrorCode {
 
     NOT_ENOUGH_STOCK(400, "상품의 재고가 부족합니다."),
 
+    NO_MATCHING_ORDER_ITEM(400, "주문 정보가 존재하지 않습니다."),
+
     ;
 
     ErrorCode(int status, String message) {
