@@ -13,19 +13,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/itemdtl")
-public class ItemDtlController {
+public class ItemDtlRestController {
 
     private final ItemDtlService itemDtlService;
 
-    @GetMapping("/{itemId}")
-    public String getItemDetail(Model model, @PathVariable Long itemId) {
-        ItemDtlDto item = itemDtlService.getItemDtl(itemId);
-        model.addAttribute("item", item);
+    @PostMapping("/order")
+    public ResponseEntity registerOrderItem(@RequestBody RegisterOrderDto registerOrderDto, Principal principal) {
+        try {
+            itemDtlService.registerOrderItem(registerOrderDto, principal);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(ErrorCode.NOT_ENOUGH_STOCK.getStatus()));
+        }
 
-        return "itemdtl/itemdtl";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
