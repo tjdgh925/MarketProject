@@ -38,7 +38,7 @@ public class ItemDtlService {
     }
 
     @Transactional
-    public void registerOrderItem(RegisterOrderDto registerOrderDto, Principal principal) throws Exception {
+    public void registerOrderItem(RegisterOrderDto registerOrderDto, Principal principal) {
         Member member = memberService.findByEmail(principal.getName())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));
         Item item = itemService.findItemById(registerOrderDto.getItemId());
@@ -49,7 +49,7 @@ public class ItemDtlService {
         orderService.registerOrder(member, orderItemList);
     }
 
-    private void addOrderItem(List<OrderItem> orderItemList, Item item, int count) throws Exception {
+    private void addOrderItem(List<OrderItem> orderItemList, Item item, int count){
         OrderItem orderItem = OrderItem.builder()
                 .item(item)
                 .count(count)

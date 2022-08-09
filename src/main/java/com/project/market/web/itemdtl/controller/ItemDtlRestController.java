@@ -22,11 +22,7 @@ public class ItemDtlRestController {
 
     @PostMapping("/order")
     public ResponseEntity registerOrderItem(@RequestBody RegisterOrderDto registerOrderDto, Principal principal) {
-        try {
-            itemDtlService.registerOrderItem(registerOrderDto, principal);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(ErrorCode.NOT_ENOUGH_STOCK.getStatus()));
-        }
+        itemDtlService.registerOrderItem(registerOrderDto, principal);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -52,7 +52,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void reduceStock(Item item, int amount) throws Exception {
+    public void reduceStock(Item item, int amount){
         int stock = item.getStockNumber();
         if (stock < amount) {
             throw new StockException(item.getStockNumber());
