@@ -18,16 +18,20 @@ import java.util.Optional;
 public class MainController {
 
     private final MainService mainService;
+    private final int MIN_CONTENT = 0;
+    private final int MAX_CONTENT = 6;
+    private final int MAX_PAGE = 5;
+
 
     @GetMapping("/")
     public String main(ItemSearchDto itemSearchDto, Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : MIN_CONTENT, MAX_CONTENT);
 
         Page<MainItemDto> items = mainService.getMainItem(itemSearchDto, pageable);
 
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);
-        model.addAttribute("maxPage", 5);
+        model.addAttribute("maxPage", MAX_PAGE);
 
         return "main/mainpage";
     }
