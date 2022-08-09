@@ -9,6 +9,7 @@ import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
 import com.project.market.global.config.jpa.AuditConfig;
 import com.project.market.web.adminItem.dto.AdminItemHistDto;
+import com.project.market.web.main.dto.MainItemDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ class ItemRepositoryTest {
     Item insert = Item.builder()
             .itemName("상품명")
             .itemDetail("상품설명")
-            .itemSellStatus(ItemSellStatus.SOLD_OUT)
+            .itemSellStatus(ItemSellStatus.SELL)
             .price(300)
             .stockNumber(2)
             .member(member)
@@ -64,7 +65,6 @@ class ItemRepositoryTest {
     @BeforeEach
     public void init() {
         memberRepository.save(member);
-        itemRepository.save(insert);
     }
 
 
@@ -158,6 +158,18 @@ class ItemRepositoryTest {
 
         //when
         Page<AdminItemHistDto> result = itemRepositoryImpl.getItemHistPage(member, pageable);
+
+        //then
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void 메인화면상품조회테스트_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+
+        //when
+        Page<MainItemDto> result = itemRepositoryImpl.getMainItemPage("", pageable);
 
         //then
         assertThat(result).isNotNull();

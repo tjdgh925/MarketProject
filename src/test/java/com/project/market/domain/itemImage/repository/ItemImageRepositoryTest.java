@@ -1,5 +1,6 @@
 package com.project.market.domain.itemImage.repository;
 
+import com.project.market.TestConfig;
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.repository.ItemRepository;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@Import(AuditConfig.class)
+@Import({AuditConfig.class, TestConfig.class})
 class ItemImageRepositoryTest {
 
     @Autowired

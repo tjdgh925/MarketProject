@@ -9,6 +9,7 @@ import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.web.adminItem.dto.AdminItemHistDto;
+import com.project.market.web.main.dto.MainItemDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -198,5 +199,39 @@ class ItemServiceTest {
 
         //then
         assertThat(result.getTotalPages()).isEqualTo(1);
+    }
+
+    @Test
+    public void 메인화면상품조회테스트_실패() throws Exception {
+        //given
+        String searchQuery = "";
+        Pageable pageable = PageRequest.of(0, 6);
+        doReturn(null).when(itemRepository).getMainItemPage(searchQuery, pageable);
+
+
+        //when
+        Page<MainItemDto> result = target.getSearchMainItem(searchQuery, pageable);
+
+        //then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    public void 메인화면상품조회테스트_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        String searchQuery = "";
+        List<MainItemDto> hist = new ArrayList<>();
+        hist.add(MainItemDto.builder()
+                .build());
+        PageImpl<MainItemDto> page = new PageImpl<>(hist);
+        doReturn(page).when(itemRepository).getMainItemPage(searchQuery, pageable);
+
+        //when
+        Page<MainItemDto> result = target.getSearchMainItem(searchQuery, pageable);
+
+        //then
+        assertThat(result.getTotalPages()).isEqualTo(1);
+
     }
 }
