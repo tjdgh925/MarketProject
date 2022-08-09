@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -27,6 +26,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
+    @Transactional(readOnly = true)
     public Item findItemById(Long itemId) {
 
         return itemRepository.findById(itemId)
@@ -40,10 +40,12 @@ public class ItemService {
         return item;
     }
 
+    @Transactional(readOnly = true)
     public Page<AdminItemHistDto> getAdminItemHistory(Member member, Pageable pageable) {
         return itemRepository.getItemHistPage(member, pageable);
     }
 
+    @Transactional(readOnly = true)
     public Page<MainItemDto> getSearchMainItem(String searchQuery, Pageable pageable) {
         return itemRepository.getMainItemPage(searchQuery, pageable);
     }
