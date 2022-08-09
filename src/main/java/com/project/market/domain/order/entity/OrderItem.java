@@ -51,4 +51,8 @@ public class OrderItem extends BaseEntity {
     public void setCount(int count) {
         this.count = count;
     }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

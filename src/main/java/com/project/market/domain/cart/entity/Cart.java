@@ -32,4 +32,9 @@ public class Cart extends BaseEntity {
         this.member = member;
         this.orderItemList = orderItemList;
     }
+
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItemList.add(orderItem);
+        orderItem.setCart(this);
+    }
 }
