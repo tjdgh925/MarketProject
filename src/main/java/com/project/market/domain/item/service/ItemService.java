@@ -5,6 +5,7 @@ import com.project.market.domain.item.repository.ItemRepository;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.global.error.exception.StockException;
 import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.main.dto.MainItemDto;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,8 @@ public class ItemService {
     public void reduceStock(Item item, int amount) throws Exception {
         int stock = item.getStockNumber();
         if (stock < amount) {
-            throw new Exception(ErrorCode.NOT_ENOUGH_STOCK.getMessage() + "(현재 재고 수량" + item.getStockNumber() + ")");
+            throw new StockException(item.getStockNumber());
+
         }
 
         item.reduceStock(amount);
