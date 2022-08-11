@@ -33,8 +33,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         Long size = queryFactory.select(item.count())
                 .from(item)
                 .join(item.imageList, itemImage)
-                .on(itemImage.isRepImage.eq(true))
-                .where(item.member.eq(member))
+                .on(eqRepImage())
+                .where(eqMember(member))
                 .fetchOne();
 
         List<AdminItemHistDto> result = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                                     itemImage.imageUrl
                             )).from(item)
                     .join(item.imageList, itemImage)
-                    .on(itemImage.isRepImage.eq(true))
+                    .on(eqRepImage())
                     .where(eqMember(member))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -68,9 +68,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         Long size = queryFactory.select(item.count())
                 .from(item)
                 .join(item.imageList, itemImage)
-                .on(itemImage.isRepImage.eq(true))
-                .where(item.itemSellStatus.eq(ItemSellStatus.SELL)
-                        .and(eqItemSearch(searchQuery)))
+                .on(eqRepImage())
+                .where(eqItemSearch(searchQuery))
                 .fetchOne();
 
         List<MainItemDto> result = new ArrayList<>();
@@ -86,9 +85,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                                     item.price
                             )).from(item)
                     .join(item.imageList, itemImage)
-                    .on(itemImage.isRepImage.eq(true))
-                    .where(item.itemSellStatus.eq(ItemSellStatus.SELL)
-                            .and(eqItemSearch(searchQuery)))
+                    .on(eqRepImage())
+                    .where(eqItemSearch(searchQuery))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetch();
@@ -99,13 +97,23 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
     private BooleanExpression eqItemSearch(String searchQuery) {
         if (StringUtils.isEmpty(searchQuery)) {
-            return null;
+            return eqStatus_SELL();
         }
-        return item.itemDetail.contains(searchQuery)
-                .or(item.itemName.contains(searchQuery));
+       return (item.itemDetail.contains(searchQuery)
+                .or(item.itemName.contains(searchQuery)))
+               .and(eqStatus_SELL());
     }
+
 
     private BooleanExpression eqMember(Member member) {
         return item.member.eq(member);
+    }
+
+    private BooleanExpression eqRepImage() {
+        return itemImage.isRepImage.eq(true);
+    }
+
+    private BooleanExpression eqStatus_SELL() {
+        return item.itemSellStatus.eq(ItemSellStatus.SELL);
     }
 }
