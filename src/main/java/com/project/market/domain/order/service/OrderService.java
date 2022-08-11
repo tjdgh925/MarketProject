@@ -39,7 +39,14 @@ public class OrderService {
 
     @Transactional
     public void deleteOrderItemById(Long orderItemId) {
+        restoreItemStock(orderItemId);
         orderItemRepository.deleteById(orderItemId);
+    }
+
+    private void restoreItemStock(Long orderItemId) {
+        OrderItem orderItem = findOrderItemById(orderItemId);
+        Item item = orderItem.getItem();
+        item.increaseStock(orderItem.getCount());
     }
 
     @Transactional

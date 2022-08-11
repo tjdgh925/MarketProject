@@ -72,4 +72,12 @@ public class Item extends BaseEntity {
             this.itemSellStatus = ItemSellStatus.SOLD_OUT;
         }
     }
+
+    public void increaseStock(int amount){
+        this.stockNumber += amount;
+
+        if (this.stockNumber > 0) {
+            this.itemSellStatus = ItemSellStatus.SELL;
+        }
+    }
 }
