@@ -20,10 +20,11 @@ public class CartService {
     //장바구니 조회하기
     @Transactional
     public Cart getCartByMember(Member member) {
-        Cart cart = cartRepository.findFirstByMember(member)
-                .orElse(createNewCart(member));
+        Optional<Cart> cart = cartRepository.findFirstByMember(member);
+        if(cart.isEmpty())
+                return createNewCart(member);
+        return cart.get();
 
-        return cart;
     }
 
     //장바구니에 상품 추가
