@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <header th:fragment="headerFragment">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
-                        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand" href="/">Market</a>
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/items/new}" sec:authorize="hasRole('ADMIN')">상품 등록</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/orderhist}" sec:authorize="hasRole('USER')">구매 이력</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/admin/itemhist}" sec:authorize="hasRole('ADMIN')">상품 관리</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()">로그인</a>
-                        </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link" th:href="@{/profile}" sec:authentication="name"/>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" action="/">
-                        <input name="searchQuery" class="form-control me-2" type="search" placeholder="상품명/키워드"
-                               aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
+<header th:fragment="headerFragment">
+
+    <style>
+        .cart {
+            margin-right: 10px;
+            width: 150px;
+        }
+    </style>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+                    aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">Market</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/items/new}" sec:authorize="hasRole('ADMIN')">상품 등록</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/orderhist}" sec:authorize="hasRole('USER')">구매 이력</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/itemhist}" sec:authorize="hasRole('ADMIN')">상품 관리</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()">로그인</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:href="@{/profile}" sec:authentication="name"/>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
+                    </li>
+                </ul>
+                <form class="d-flex" action="/">
+                    <a class="cart btn btn-outline-success" sec:authorize="isAuthenticated()"
+                       th:href="@{/cart}">장바구니</a>
+                    <input name="searchQuery" class="form-control me-2" type="search" placeholder="상품명/키워드"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
+</header>
 </html>
