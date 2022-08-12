@@ -26,7 +26,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AdminItemService {
 
@@ -51,6 +50,7 @@ public class AdminItemService {
         return member;
     }
 
+    @Transactional(readOnly = true)
     public UpdateAdminItemDto getItemAndImages(long itemId) {
         Item item = itemService.findItemById(itemId);
         List<UpdateAdminItemDto.ItemImageDto> itemImageDtos = getItemImageDtos(item);
@@ -92,6 +92,8 @@ public class AdminItemService {
             }
         }
     }
+
+    @Transactional(readOnly = true)
     public Page<AdminItemHistDto> getItemHistory(Principal principal, Pageable pageable) {
 
         Member member = memberService.findByEmail(principal.getName())

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemImageService {
 
@@ -51,6 +50,7 @@ public class ItemImageService {
         itemImageRepository.save(itemImage);
     }
 
+    @Transactional(readOnly = true)
     public List<ItemImage> findImagesByItem(Item item) {
         return itemImageRepository.findByItemOrderById(item);
     }

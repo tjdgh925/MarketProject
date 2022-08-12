@@ -13,19 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/itemdtl")
-public class ItemDtlController {
+public class ItemDtlRestController {
 
     private final ItemDtlService itemDtlService;
 
-    @GetMapping("/{itemId}")
-    public String getItemDetail(Model model, @PathVariable Long itemId) {
-        ItemDtlDto item = itemDtlService.getItemDtl(itemId);
-        model.addAttribute("item", item);
+    @PostMapping("/order")
+    public ResponseEntity registerOrderItem(@RequestBody RegisterOrderDto registerOrderDto, Principal principal) {
+        itemDtlService.registerOrderItem(registerOrderDto, principal);
 
-        return "itemdtl/itemdtl";
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }

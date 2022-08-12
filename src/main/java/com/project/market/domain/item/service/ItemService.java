@@ -5,6 +5,7 @@ import com.project.market.domain.item.repository.ItemRepository;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.global.error.exception.StockException;
 import com.project.market.web.adminItem.dto.AdminItemHistDto;
 import com.project.market.web.main.dto.MainItemDto;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -27,6 +27,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
+    @Transactional(readOnly = true)
     public Item findItemById(Long itemId) {
 
         return itemRepository.findById(itemId)
@@ -40,11 +41,24 @@ public class ItemService {
         return item;
     }
 
+    @Transactional(readOnly = true)
     public Page<AdminItemHistDto> getAdminItemHistory(Member member, Pageable pageable) {
         return itemRepository.getItemHistPage(member, pageable);
     }
 
+    @Transactional(readOnly = true)
     public Page<MainItemDto> getSearchMainItem(String searchQuery, Pageable pageable) {
         return itemRepository.getMainItemPage(searchQuery, pageable);
+    }
+
+    @Transactional
+    public void reduceStock(Item item, int amount){
+        int stock = item.getStockNumber();
+        if (stock < amount) {
+            throw new StockException(item.getStockNumber());
+
+        }
+
+        item.reduceStock(amount);
     }
 }
