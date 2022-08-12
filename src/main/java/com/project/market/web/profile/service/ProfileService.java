@@ -11,13 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 
     private final MemberService memberService;
 
+    @Transactional(readOnly = true)
     public Member getMemberInfo(String email) {
         return memberService.findByEmail(email)
                 .orElseThrow(()-> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));

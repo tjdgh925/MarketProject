@@ -27,6 +27,9 @@ import java.util.Optional;
 public class AdminItemController {
 
     private final AdminItemService adminItemService;
+    private final int MIN_CONTENT = 0;
+    private final int MAX_CONTENT = 6;
+    private final int MAX_PAGE = 5;
 
     @GetMapping("/items/new")
     public String getAdminItemView(Model model) {
@@ -106,13 +109,13 @@ public class AdminItemController {
             Optional<Integer> page, Model model, Principal principal
     ) {
 
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : MIN_CONTENT, MAX_CONTENT);
 
         Page<AdminItemHistDto> adminIemHistDtos = adminItemService.getItemHistory(principal, pageable);
 
         model.addAttribute("items", adminIemHistDtos);
         model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("maxPage", 5);
+        model.addAttribute("maxPage", MAX_PAGE);
 
         return "itemhist/itemhist";
     }
