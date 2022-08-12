@@ -135,14 +135,14 @@ class CartListServiceTest {
     @Test
     public void 주문상품수량변경테스트_성공() throws Exception {
         //given
-        OrderItem orderItem = OrderItem.builder().item(item).count(10).build();
+        OrderItem orderItem = OrderItem.builder().item(item).count(15).build();
         doReturn(orderItem).when(orderService).findOrderItemById(anyLong());
 
         //when
         target.changeItemCount(1L, 11);
 
         //then
-        verify(item, times(1)).reduceStock(anyInt());
+        verify(item, times(1)).increaseStock(anyInt());
     }
 
     @Test

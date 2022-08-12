@@ -65,6 +65,7 @@ class ItemRepositoryTest {
     @BeforeEach
     public void init() {
         memberRepository.save(member);
+        itemRepository.save(insert);
     }
 
 

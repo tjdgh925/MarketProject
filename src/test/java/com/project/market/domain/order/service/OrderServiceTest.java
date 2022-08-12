@@ -10,7 +10,7 @@ import com.project.market.domain.order.entity.Order;
 import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.repository.OrderItemRepository;
 import com.project.market.domain.order.repository.OrderRepository;
-import com.project.market.global.error.exception.BusinessException;
+import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +70,7 @@ class OrderServiceTest {
     @BeforeEach
     public void init() {
         memberRepository.save(member);
+        orderItemRepository.save(orderItem);
     }
 
 
@@ -112,7 +112,7 @@ class OrderServiceTest {
         doReturn(Optional.empty()).when(orderItemRepository).findById(any(Long.class));
 
         //when
-        BusinessException result = assertThrows(BusinessException.class, () -> target.findOrderItemById(1L));
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.findOrderItemById(1L));
 
         //then
         assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_ORDER_ITEM.getMessage());
@@ -133,26 +133,24 @@ class OrderServiceTest {
     @Test
     public void 주문삭제테스트_실패() throws Exception {
         //given
-        doThrow(EmptyResultDataAccessException.class).when(orderItemRepository).deleteById(any(Long.class));
 
         //when
-        EmptyResultDataAccessException result = assertThrows(EmptyResultDataAccessException.class, () -> target.deleteOrderItemById(2L));
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.deleteOrderItemById(2L));
 
         //then
-        assertThat(result).isInstanceOf(EmptyResultDataAccessException.class);
+        assertThat(result).isInstanceOf(EntityNotFoundException.class);
     }
 
     @Test
     public void 주문삭제테스트_성공() throws Exception {
         //given
-        doReturn(Optional.empty()).when(orderItemRepository).findById(any(Long.class));
+        doReturn(Optional.of(orderItem)).when(orderItemRepository).findById(anyLong());
 
         //when
-        target.deleteOrderItemById(orderItem.getId());
-        BusinessException result = assertThrows(BusinessException.class, () -> target.findOrderItemById(1L));
+        target.deleteOrderItemById(1L);
 
         //then
-        assertThat(result).isInstanceOf(BusinessException.class);
+        verify(orderItemRepository, times(1)).deleteById(anyLong());
     }
 
     @Test

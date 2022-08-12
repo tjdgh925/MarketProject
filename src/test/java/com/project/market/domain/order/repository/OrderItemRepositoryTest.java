@@ -132,7 +132,7 @@ class OrderItemRepositoryTest {
 
 
         //when
-        EmptyResultDataAccessException result = assertThrows(EmptyResultDataAccessException.class, () -> orderItemRepository.deleteById(2L));
+        EmptyResultDataAccessException result = assertThrows(EmptyResultDataAccessException.class, () -> orderItemRepository.deleteById(3L));
 
         //then
         assertThat(result).isInstanceOf(EmptyResultDataAccessException.class);
