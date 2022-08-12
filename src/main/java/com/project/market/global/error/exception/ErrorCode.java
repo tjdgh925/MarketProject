@@ -24,6 +24,7 @@ public enum ErrorCode {
 
     NO_MATCHING_ORDER_ITEM(400, "주문 정보가 존재하지 않습니다."),
 
+    CART_ITEM_NOT_SELECTED(400, "주문할 상품을 선택해주세요."),
     ;
 
     ErrorCode(int status, String message) {

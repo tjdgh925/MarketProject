@@ -8,6 +8,7 @@ import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.repository.OrderItemRepository;
 import com.project.market.domain.order.repository.OrderRepository;
 import com.project.market.global.error.exception.BusinessException;
+import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class OrderService {
 
     public OrderItem findOrderItemById(Long orderItemId) {
         return orderItemRepository.findById(orderItemId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_ORDER_ITEM));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NO_MATCHING_ORDER_ITEM));
     }
 
     @Transactional

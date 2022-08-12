@@ -9,7 +9,9 @@ import com.project.market.domain.member.service.MemberService;
 import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.service.OrderService;
 import com.project.market.global.error.exception.BusinessException;
+import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.global.error.exception.StockException;
 import com.project.market.web.cartList.dto.CartListItemDto;
 import com.project.market.web.cartList.dto.CartOrderDto;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +63,7 @@ public class CartListService {
 
     private Member getMember(Principal principal) {
         return memberService.findByEmail(principal.getName())
-                .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NO_MATCHING_MEMBER));
     }
 
     private List<OrderItem> getOrderItemList(Member member) {
@@ -93,9 +95,12 @@ public class CartListService {
         Item item = orderItem.getItem();
         Integer before = orderItem.getCount();
         if (before > count) {
-            item.increaseStock(count);
+            item.increaseStock(before-count);
         } else if (before < count) {
-            item.reduceStock(count);
+            if (item.getStockNumber() == 0){
+                throw new StockException(item.getStockNumber());
+            }
+            item.reduceStock(count-before);
         }
     }
 }

@@ -25,4 +25,18 @@ public class ControllerExceptionHandler {
         log.error("error: ", exception);
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity handleEntityNotFoundException(EntityNotFoundException exception) {
+
+        log.error("error: ", exception);
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DtoEmptyException.class)
+    public ResponseEntity handleDtoEmptyException(DtoEmptyException exception) {
+
+        log.error("error: ", exception);
+        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

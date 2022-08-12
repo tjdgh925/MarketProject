@@ -1,5 +1,6 @@
 package com.project.market.web.itemdtl.service;
 
+import com.project.market.domain.cart.service.CartService;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.member.entity.Member;
@@ -30,6 +31,8 @@ public class ItemDtlService {
     private final OrderService orderService;
 
     private final MemberService memberService;
+
+    private final CartService cartService;
 
     public ItemDtlDto getItemDtl(Long itemId) {
 
