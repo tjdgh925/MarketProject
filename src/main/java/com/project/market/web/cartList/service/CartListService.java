@@ -31,7 +31,7 @@ public class CartListService {
     private final OrderService orderService;
     private final MemberService memberService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CartListItemDto> getCartList(Principal principal) {
         Member member = getMember(principal);
         List<OrderItem> orderItemList = getOrderItemList(member);

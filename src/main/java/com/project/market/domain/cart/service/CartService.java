@@ -18,7 +18,7 @@ public class CartService {
     private final CartRepository cartRepository;
 
     //장바구니 조회하기
-    @Transactional
+    @Transactional(readOnly = true)
     public Cart getCartByMember(Member member) {
         Optional<Cart> cart = cartRepository.findFirstByMember(member);
         if(cart.isEmpty())
