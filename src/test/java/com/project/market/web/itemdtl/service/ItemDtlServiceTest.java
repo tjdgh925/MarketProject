@@ -1,10 +1,12 @@
 package com.project.market.web.itemdtl.service;
 
+import com.project.market.domain.cart.service.CartService;
 import com.project.market.domain.item.constant.ItemSellStatus;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.service.MemberService;
+import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.service.OrderService;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.ErrorCode;
@@ -42,6 +44,9 @@ class ItemDtlServiceTest {
 
     @Mock
     private MemberService memberService;
+
+    @Mock
+    private CartService cartService;
 
     @Test
     public void 상품상세내용조회테스트_실패() throws Exception {
@@ -104,6 +109,37 @@ class ItemDtlServiceTest {
 
         //then
         verify(orderService, times(1)).registerOrder(any(Member.class), anyList());
+    }
+
+    @Test
+    public void 장바구니추가테스트_실패() throws Exception {
+        //given
+        doReturn("test").when(principal).getName();
+        doReturn(Optional.empty()).when(memberService).findByEmail(anyString());
+        RegisterOrderDto registerOrderDto = RegisterOrderDto.builder().itemId(1L).count(3).build();
+
+        //when
+        BusinessException result = assertThrows(BusinessException.class, () -> target.cartOrderItem(registerOrderDto, principal));
+
+        //then
+        assertThat(result).isInstanceOf(BusinessException.class);
+    }
+
+    @Test
+    public void 장바구니추가테스트_성공() throws Exception {
+        //given
+        Member member = Member.builder().build();
+        Item item = Item.builder().price(100).build();
+        doReturn("test").when(principal).getName();
+        doReturn(Optional.of(member)).when(memberService).findByEmail(anyString());
+        doReturn(item).when(itemService).findItemById(anyLong());
+        RegisterOrderDto registerOrderDto = RegisterOrderDto.builder().itemId(1L).count(3).build();
+
+        //when
+        target.cartOrderItem(registerOrderDto, principal);
+
+        //then
+        verify(cartService, times(1)).addOrderItem(any(OrderItem.class),any(Member.class));
     }
 
 }

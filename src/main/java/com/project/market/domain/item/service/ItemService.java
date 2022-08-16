@@ -55,7 +55,7 @@ public class ItemService {
     public void reduceStock(Item item, int amount){
         int stock = item.getStockNumber();
         if (stock < amount) {
-            throw new StockException(item.getStockNumber());
+            throw new StockException(ErrorCode.NOT_ENOUGH_STOCK);
 
         }
 

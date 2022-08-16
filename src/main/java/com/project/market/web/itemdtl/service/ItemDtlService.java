@@ -1,5 +1,6 @@
 package com.project.market.web.itemdtl.service;
 
+import com.project.market.domain.cart.service.CartService;
 import com.project.market.domain.item.entity.Item;
 import com.project.market.domain.item.service.ItemService;
 import com.project.market.domain.member.entity.Member;
@@ -30,6 +31,8 @@ public class ItemDtlService {
 
     private final MemberService memberService;
 
+    private final CartService cartService;
+
     public ItemDtlDto getItemDtl(Long itemId) {
 
         Item item = itemService.findItemById(itemId);
@@ -49,13 +52,29 @@ public class ItemDtlService {
         orderService.registerOrder(member, orderItemList);
     }
 
-    private void addOrderItem(List<OrderItem> orderItemList, Item item, int count){
+    @Transactional
+    public void cartOrderItem(RegisterOrderDto registerOrderDto, Principal principal) {
+        Member member = memberService.findByEmail(principal.getName())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NO_MATCHING_MEMBER));
+        Item item = itemService.findItemById(registerOrderDto.getItemId());
+        OrderItem orderItem = getOrderItem(item, registerOrderDto.getCount());
+
+        itemService.reduceStock(item, registerOrderDto.getCount());
+        cartService.addOrderItem(orderItem, member);
+    }
+
+    private void addOrderItem(List<OrderItem> orderItemList, Item item, int count) {
+        OrderItem orderItem = getOrderItem(item, count);
+        itemService.reduceStock(item, count);
+        orderItemList.add(orderItem);
+    }
+
+    private OrderItem getOrderItem(Item item, int count) {
         OrderItem orderItem = OrderItem.builder()
                 .item(item)
                 .count(count)
                 .orderPrice(item.getPrice() * count)
                 .build();
-        itemService.reduceStock(item, count);
-        orderItemList.add(orderItem);
+        return orderItem;
     }
 }

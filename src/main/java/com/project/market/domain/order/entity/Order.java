@@ -62,6 +62,7 @@ public class Order extends BaseEntity {
     private void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
+        orderItem.setCart(null);
     }
 }
 

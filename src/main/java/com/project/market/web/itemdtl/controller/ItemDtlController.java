@@ -28,4 +28,15 @@ public class ItemDtlController {
         return "itemdtl/itemdtl";
     }
 
+    @PostMapping("/cart")
+    public @ResponseBody ResponseEntity cartOrderItem(@RequestBody RegisterOrderDto registerOrderDto, Principal principal) {
+        try {
+            itemDtlService.cartOrderItem(registerOrderDto, principal);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.valueOf(ErrorCode.NOT_ENOUGH_STOCK.getStatus()));
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

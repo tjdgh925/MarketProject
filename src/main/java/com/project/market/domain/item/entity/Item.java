@@ -63,6 +63,7 @@ public class Item extends BaseEntity {
         this.price = updateItem.price;
         this.stockNumber = updateItem.stockNumber;
         this.itemDetail = updateItem.itemDetail;
+        checkSellStatus();
     }
 
     public void reduceStock(int amount) {
@@ -71,5 +72,23 @@ public class Item extends BaseEntity {
         if (this.stockNumber == 0) {
             this.itemSellStatus = ItemSellStatus.SOLD_OUT;
         }
+    }
+
+    public void increaseStock(int amount) {
+        this.stockNumber += amount;
+
+        if (this.stockNumber > 0) {
+            this.itemSellStatus = ItemSellStatus.SELL;
+        }
+    }
+
+    private void checkSellStatus() {
+        if (isStockChanged()) {
+            this.itemSellStatus = ItemSellStatus.SELL;
+        }
+    }
+
+    private boolean isStockChanged() {
+        return this.stockNumber > 0 && this.itemSellStatus == ItemSellStatus.SOLD_OUT;
     }
 }

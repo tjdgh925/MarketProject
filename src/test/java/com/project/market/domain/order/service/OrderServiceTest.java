@@ -10,6 +10,8 @@ import com.project.market.domain.order.entity.Order;
 import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.repository.OrderItemRepository;
 import com.project.market.domain.order.repository.OrderRepository;
+import com.project.market.global.error.exception.EntityNotFoundException;
+import com.project.market.global.error.exception.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,12 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -34,6 +36,9 @@ class OrderServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private OrderItemRepository orderItemRepository;
 
     @Mock
     private MemberRepository memberRepository;
@@ -56,9 +61,16 @@ class OrderServiceTest {
             .member(member)
             .build();
 
+    OrderItem orderItem =  OrderItem.builder()
+            .orderPrice(300)
+            .count(3)
+            .item(item)
+            .build();
+
     @BeforeEach
     public void init() {
         memberRepository.save(member);
+        orderItemRepository.save(orderItem);
     }
 
 
@@ -94,5 +106,64 @@ class OrderServiceTest {
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
+    @Test
+    public void 주문조회테스트_싫패() throws Exception {
+        //given
+        doReturn(Optional.empty()).when(orderItemRepository).findById(any(Long.class));
+
+        //when
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.findOrderItemById(1L));
+
+        //then
+        assertThat(result.getMessage()).isEqualTo(ErrorCode.NO_MATCHING_ORDER_ITEM.getMessage());
+    }
+
+    @Test
+    public void 주문조회테스트_성공() throws Exception {
+        //given
+        doReturn(Optional.of(orderItem)).when(orderItemRepository).findById(any(Long.class));
+
+        //when
+        OrderItem result = target.findOrderItemById(1L);
+
+        //then
+        assertThat(result).isEqualTo(orderItem);
+    }
+
+    @Test
+    public void 주문삭제테스트_실패() throws Exception {
+        //given
+
+        //when
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.deleteOrderItemById(2L));
+
+        //then
+        assertThat(result).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void 주문삭제테스트_성공() throws Exception {
+        //given
+        doReturn(Optional.of(orderItem)).when(orderItemRepository).findById(anyLong());
+
+        //when
+        target.deleteOrderItemById(1L);
+
+        //then
+        verify(orderItemRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void 주문개수변경_성공() throws Exception {
+        //given
+        doReturn(Optional.of(orderItem)).when(orderItemRepository).findById(orderItem.getId());
+
+        //when
+        OrderItem result = target.findOrderItemById(orderItem.getId());
+        target.changeOrderItemCount(result, 15);
+
+        //then
+        assertThat(result.getCount()).isEqualTo(15);
+    }
 
 }

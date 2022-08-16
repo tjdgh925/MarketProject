@@ -167,7 +167,7 @@
                 data     : param,
                 success  : function(result, status){
                     alert("장바구니에 저장했습니다.");
-                    // location.href='/orderhist';
+                    location.href='/itemdtl/' + paramData.itemId;
                 },
                 error : function(jqXHR, status, error){
                     if(jqXHR.status == '401'){

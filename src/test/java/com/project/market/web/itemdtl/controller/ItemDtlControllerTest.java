@@ -96,4 +96,20 @@ class ItemDtlControllerTest {
         resultActions.andExpect(status().isOk());
     }
 
+    @Test
+    public void 장바구니등록테스트() throws Exception {
+        //given
+        final String url = "/itemdtl/cart";
+        RegisterOrderDto registerOrderDto = RegisterOrderDto.builder().itemId(1L).count(3).build();
+        //when
+        ResultActions resultActions = mockMvc.perform(post(url)
+                .content(gson.toJson(registerOrderDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .principal(principal)
+        ).andDo(print());
+
+        //then
+        resultActions.andExpect(status().isOk());
+    }
+
 }
