@@ -105,7 +105,7 @@ public class CartListService {
         if (before < count) {
             change = count - before;
             if (item.getStockNumber() - change <= 0){
-                throw new StockException(item.getStockNumber());
+                throw new StockException(ErrorCode.NOT_ENOUGH_STOCK);
             }
             item.reduceStock(change);
         }

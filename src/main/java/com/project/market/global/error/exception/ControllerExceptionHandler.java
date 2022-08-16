@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
 @ControllerAdvice
@@ -16,18 +14,11 @@ public class ControllerExceptionHandler {
     public ResponseEntity handleException(Exception exception) {
         log.error("error: ", exception);
 
-        int status = 0;
+        ErrorCode errorCode = ErrorCode.getErrorCodeByErrorMessage(exception.getMessage());
 
-        if (exception instanceof BusinessException) {
-            status = HttpStatus.BAD_REQUEST.value();
-        } else if (exception instanceof StockException) {
-            status = ErrorCode.NOT_ENOUGH_STOCK.getStatus();
-        } else if (exception instanceof EntityNotFoundException) {
-            status = HttpStatus.BAD_REQUEST.value();
-        } else if (exception instanceof DtoEmptyException) {
-            status = HttpStatus.CHECKPOINT.value();
+        if (errorCode == null) {
+            return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(status));
+        return new ResponseEntity<>(errorCode.getMessage(), HttpStatus.valueOf(errorCode.getStatus()));
     }
 }

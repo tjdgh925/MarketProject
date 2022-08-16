@@ -74,7 +74,7 @@ public class Item extends BaseEntity {
         }
     }
 
-    public void increaseStock(int amount){
+    public void increaseStock(int amount) {
         this.stockNumber += amount;
 
         if (this.stockNumber > 0) {
@@ -83,9 +83,9 @@ public class Item extends BaseEntity {
     }
 
     private void checkSellStatus() {
-           if (isStockChanged()){
-               this.itemSellStatus = ItemSellStatus.SELL;
-           }
+        if (isStockChanged()) {
+            this.itemSellStatus = ItemSellStatus.SELL;
+        }
     }
 
     private boolean isStockChanged() {
