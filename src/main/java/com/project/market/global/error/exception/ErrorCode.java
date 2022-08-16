@@ -20,7 +20,7 @@ public enum ErrorCode {
     NO_MATCHING_ITEM(400, "해당 상품이 존재하지 않습니다."),
     UPDATE_ITEM_ERROR(400, "상품 수정중에 오류가 발생했습니다."),
 
-    NOT_ENOUGH_STOCK(400, "상품의 재고가 부족합니다."),
+    NOT_ENOUGH_STOCK(409, "상품의 재고가 부족합니다."),
 
     NO_MATCHING_ORDER_ITEM(400, "주문 정보가 존재하지 않습니다."),
 

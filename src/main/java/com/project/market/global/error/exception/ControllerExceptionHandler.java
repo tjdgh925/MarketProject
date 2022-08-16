@@ -12,31 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity handleBusinessException(BusinessException exception) {
-
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity handleException(Exception exception) {
         log.error("error: ", exception);
-        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler(StockException.class)
-    public ResponseEntity handleStockException(StockException exception) {
+        int status = 0;
 
-        log.error("error: ", exception);
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
-    }
+        if (exception instanceof BusinessException) {
+            status = HttpStatus.BAD_REQUEST.value();
+        } else if (exception instanceof StockException) {
+            status = ErrorCode.NOT_ENOUGH_STOCK.getStatus();
+        } else if (exception instanceof EntityNotFoundException) {
+            status = HttpStatus.BAD_REQUEST.value();
+        } else if (exception instanceof DtoEmptyException) {
+            status = HttpStatus.CHECKPOINT.value();
+        }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleEntityNotFoundException(EntityNotFoundException exception) {
-
-        log.error("error: ", exception);
-        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DtoEmptyException.class)
-    public ResponseEntity handleDtoEmptyException(DtoEmptyException exception) {
-
-        log.error("error: ", exception);
-        return new ResponseEntity(exception.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(exception.getMessage(), HttpStatus.valueOf(status));
     }
 }
