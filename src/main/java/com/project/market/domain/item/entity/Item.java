@@ -83,8 +83,12 @@ public class Item extends BaseEntity {
     }
 
     private void checkSellStatus() {
-           if (this.stockNumber > 0 && this.itemSellStatus == ItemSellStatus.SOLD_OUT){
+           if (isStockChanged()){
                this.itemSellStatus = ItemSellStatus.SELL;
            }
+    }
+
+    private boolean isStockChanged() {
+        return this.stockNumber > 0 && this.itemSellStatus == ItemSellStatus.SOLD_OUT;
     }
 }
