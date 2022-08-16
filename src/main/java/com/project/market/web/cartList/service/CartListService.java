@@ -94,13 +94,16 @@ public class CartListService {
     private void changeItemStock(int count, OrderItem orderItem) {
         Item item = orderItem.getItem();
         Integer before = orderItem.getCount();
+        int change;
         if (before > count) {
-            item.increaseStock(before-count);
+            change = before - count;
+            item.increaseStock(change);
         } else if (before < count) {
-            if (item.getStockNumber() == 0){
+            change = count - before;
+            if (item.getStockNumber() - change <= 0){
                 throw new StockException(item.getStockNumber());
             }
-            item.reduceStock(count-before);
+            item.reduceStock(change);
         }
     }
 }

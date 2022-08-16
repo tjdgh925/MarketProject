@@ -74,7 +74,10 @@
                     if (jqXHR.status == '401') {
                         alert('로그인 후 이용해주세요');
                         location.href = '/members/login';
-                    } 
+                    } else if (jqXHR.status == '409') {
+                        alert(jqXHR.responseText);
+                        location.href = '/cart';
+                    }
                 }
             });
         }
@@ -90,17 +93,15 @@
                 dataType: "json",
                 cache: false,
                 success: function (result, status) {
-                    location.href = '/cart';
                 },
                 error: function (jqXHR, status, error) {
-
                     if (jqXHR.status == '401') {
                         alert('로그인 후 이용해주세요');
                         location.href = '/members/login';
                     } else {
-                        alert(jqXHR.responseText);
+                        alert('상품을 취소했습니다.');
+                        location.href = '/cart';
                     }
-
                 }
             });
         }
