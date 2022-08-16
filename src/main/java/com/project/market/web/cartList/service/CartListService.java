@@ -95,10 +95,14 @@ public class CartListService {
         Item item = orderItem.getItem();
         Integer before = orderItem.getCount();
         int change;
+
         if (before > count) {
             change = before - count;
             item.increaseStock(change);
-        } else if (before < count) {
+            return;
+        }
+
+        if (before < count) {
             change = count - before;
             if (item.getStockNumber() - change <= 0){
                 throw new StockException(item.getStockNumber());
