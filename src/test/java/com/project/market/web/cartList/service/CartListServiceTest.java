@@ -91,7 +91,7 @@ class CartListServiceTest {
 
         List<CartOrderDto> cartOrderDtoList = new ArrayList<>();
         CartOrderDto cartOrderDto = new CartOrderDto();
-        cartOrderDto.setId(1L);
+//        cartOrderDto.setId(1L);
         cartOrderDtoList.add(cartOrderDto);
 
         //when
@@ -110,7 +110,7 @@ class CartListServiceTest {
 
         List<CartOrderDto> cartOrderDtoList = new ArrayList<>();
         CartOrderDto cartOrderDto = new CartOrderDto();
-        cartOrderDto.setId(1L);
+//        cartOrderDto.setId(1L);
         cartOrderDtoList.add(cartOrderDto);
 
         //when
