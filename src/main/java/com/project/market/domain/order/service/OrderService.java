@@ -10,7 +10,10 @@ import com.project.market.domain.order.repository.OrderRepository;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.orderhist.dto.OrderHistDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +35,7 @@ public class OrderService {
         ordersRepository.save(order);
     }
 
+    @Transactional(readOnly = true)
     public OrderItem findOrderItemById(Long orderItemId) {
         return orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NO_MATCHING_ORDER_ITEM));
@@ -54,4 +58,8 @@ public class OrderService {
         orderItem.setCount(count);
     }
 
+    @Transactional(readOnly = true)
+    public Page<OrderHistDto> getOrderHistPage(Member member, Pageable pageable) {
+        return ordersRepository.getOrderHistByMember(member, pageable);
+    }
 }
