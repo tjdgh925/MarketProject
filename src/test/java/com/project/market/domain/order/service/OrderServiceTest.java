@@ -6,19 +6,26 @@ import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.constant.MemberType;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
+import com.project.market.domain.order.constant.OrderStatus;
 import com.project.market.domain.order.entity.Order;
 import com.project.market.domain.order.entity.OrderItem;
 import com.project.market.domain.order.repository.OrderItemRepository;
 import com.project.market.domain.order.repository.OrderRepository;
 import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
+import com.project.market.web.orderhist.dto.OrderHistDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -164,6 +171,35 @@ class OrderServiceTest {
 
         //then
         assertThat(result.getCount()).isEqualTo(15);
+    }
+
+    @Test
+    public void 주문이력조회_실패() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        doReturn(null).when(orderRepository).getOrderHistByMember(member, pageable);
+
+        //when
+        Page<OrderHistDto> result = target.getOrderHistPage(member, pageable);
+
+        //then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    public void 주문이력조회_성공() throws Exception {
+        //given
+        Pageable pageable = PageRequest.of(0, 6);
+        List<OrderHistDto> hist = new ArrayList<>();
+        hist.add(new OrderHistDto(1L, LocalDateTime.now(), OrderStatus.ORDER));
+        PageImpl<OrderHistDto> page = new PageImpl<>(hist);
+        doReturn(page).when(orderRepository).getOrderHistByMember(member, pageable);
+
+        //when
+        Page<OrderHistDto> result = target.getOrderHistPage(member, pageable);
+
+        //then
+        assertThat(result.getTotalPages()).isEqualTo(1);
     }
 
 }
