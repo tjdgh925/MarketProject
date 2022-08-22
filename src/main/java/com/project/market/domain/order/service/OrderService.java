@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +62,20 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderHistDto> getOrderHistPage(Member member, Pageable pageable) {
         return ordersRepository.getOrderHistByMember(member, pageable);
+    }
+
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        Order order = ordersRepository.findById(orderId)
+                .orElseThrow(()-> new EntityNotFoundException(ErrorCode.NO_MATCHING_ORDER_ITEM));
+
+        restoreItemStocks(order);
+
+        order.cancel();
+    }
+
+    private void restoreItemStocks(Order order) {
+        List<OrderItem> orderItems = order.getOrderItems();
+        orderItems.stream().forEach(orderItem -> restoreItemStock(orderItem.getId()));
     }
 }
