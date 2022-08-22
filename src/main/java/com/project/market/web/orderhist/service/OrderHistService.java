@@ -28,6 +28,11 @@ public class OrderHistService {
         return orderService.getOrderHistPage(member, pageable);
     }
 
+    @Transactional
+    public void cancelOrder(Long id) {
+        orderService.cancelOrder(id);
+    }
+
     private Member getMember(Principal principal) {
         return memberService.findByEmail(principal.getName())
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NO_MATCHING_MEMBER));
