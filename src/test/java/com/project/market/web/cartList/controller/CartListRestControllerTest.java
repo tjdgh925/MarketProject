@@ -62,7 +62,7 @@ class CartListRestControllerTest {
         //given
         final String url = "/cart/orders";
         CartOrderDto cartOrderDto = new CartOrderDto();
-        cartOrderDto.setId(1L);
+//        cartOrderDto.setId(1L);
 
         //when
         ResultActions resultActions = mockMvc.perform(post(url)
@@ -162,12 +162,12 @@ class CartListRestControllerTest {
         CartOrderDto cartOrderDto = new CartOrderDto();
         List<CartOrderDto> cartOrderDtoList = new ArrayList<>();
         CartOrderDto cartOrderDto1 = new CartOrderDto();
-        cartOrderDto1.setId(1L);
+//        cartOrderDto1.setId(1L);
         CartOrderDto cartOrderDto2 = new CartOrderDto();
-        cartOrderDto2.setId(2L);
+//        cartOrderDto2.setId(2L);
         cartOrderDtoList.add(cartOrderDto1);
         cartOrderDtoList.add(cartOrderDto2);
-        cartOrderDto.setCartOrderDtoList(cartOrderDtoList);
+//        cartOrderDto.setCartOrderDtoList(cartOrderDtoList);
         return cartOrderDto;
     }
 
