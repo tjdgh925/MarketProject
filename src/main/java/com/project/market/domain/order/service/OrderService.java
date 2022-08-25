@@ -44,15 +44,11 @@ public class OrderService {
 
     @Transactional
     public void deleteOrderItemById(Long orderItemId) {
-        restoreItemStock(orderItemId);
+        OrderItem orderItem = findOrderItemById(orderItemId);
+        orderItem.restoreItemStock();
         orderItemRepository.deleteById(orderItemId);
     }
 
-    private void restoreItemStock(Long orderItemId) {
-        OrderItem orderItem = findOrderItemById(orderItemId);
-        Item item = orderItem.getItem();
-        item.increaseStock(orderItem.getCount());
-    }
 
     @Transactional
     public void changeOrderItemCount(OrderItem orderItem, int count) {
@@ -69,13 +65,9 @@ public class OrderService {
         Order order = ordersRepository.findById(orderId)
                 .orElseThrow(()-> new EntityNotFoundException(ErrorCode.NO_MATCHING_ORDER_ITEM));
 
-        restoreItemStocks(order);
+        List<OrderItem> orderItems = order.getOrderItems();
+        orderItems.stream().forEach(orderItem -> orderItem.restoreItemStock());
 
         order.cancel();
-    }
-
-    private void restoreItemStocks(Order order) {
-        List<OrderItem> orderItems = order.getOrderItems();
-        orderItems.stream().forEach(orderItem -> restoreItemStock(orderItem.getId()));
     }
 }

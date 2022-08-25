@@ -55,8 +55,9 @@ public class OrderItem extends BaseEntity {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
-
-    public void removeCart(Cart cart) {
-        this.cart = null;
+    
+    public void restoreItemStock() {
+        Item item = this.getItem();
+        item.increaseStock(this.getCount());
     }
 }
