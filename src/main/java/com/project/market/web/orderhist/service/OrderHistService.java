@@ -3,11 +3,13 @@ package com.project.market.web.orderhist.service;
 
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.service.MemberService;
+import com.project.market.domain.order.entity.Order;
 import com.project.market.domain.order.service.OrderService;
 import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.web.orderhist.dto.OrderHistDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,8 @@ public class OrderHistService {
     }
 
     @Transactional
-    public void cancelOrder(Long id) {
-        orderService.cancelOrder(id);
+    public Order cancelOrder(Long id) {
+        return orderService.cancelOrder(id);
     }
 
     private Member getMember(Principal principal) {

@@ -61,7 +61,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancelOrder(Long orderId) {
+    public Order cancelOrder(Long orderId) {
         Order order = ordersRepository.findById(orderId)
                 .orElseThrow(()-> new EntityNotFoundException(ErrorCode.NO_MATCHING_ORDER_ITEM));
 
@@ -69,5 +69,6 @@ public class OrderService {
         orderItems.stream().forEach(orderItem -> orderItem.restoreItemStock());
 
         order.cancel();
+        return order;
     }
 }
