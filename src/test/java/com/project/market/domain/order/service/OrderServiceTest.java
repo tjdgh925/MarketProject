@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,9 @@ class OrderServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private Order order;
     
     final Member member = Member.builder()
             .email("test@email.com")
@@ -200,6 +204,31 @@ class OrderServiceTest {
 
         //then
         assertThat(result.getTotalPages()).isEqualTo(1);
+    }
+
+    @Test
+    public void 주문취소테스트_실패() throws Exception {
+        //given
+        doReturn(Optional.empty()).when(orderRepository).findById(anyLong());
+
+
+        //when
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.cancelOrder(1L));
+
+        //then
+        assertThat(result).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void 주문취소테스트_성공() throws Exception {
+        //given
+        doReturn(Optional.of(order)).when(orderRepository).findById(anyLong());
+
+        //when
+        target.cancelOrder(1L);
+
+        //then
+        verify(order, times(1)).cancel();
     }
 
 }

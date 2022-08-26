@@ -6,6 +6,7 @@ import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.service.MemberService;
 import com.project.market.domain.order.constant.OrderStatus;
 import com.project.market.domain.order.service.OrderService;
+import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.web.orderhist.dto.OrderHistDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doReturn;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderHistServiceTest {
@@ -82,5 +85,28 @@ class OrderHistServiceTest {
 
         //then
         assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void 주문취소테스트_실패() throws Exception {
+        //given
+        doThrow(EntityNotFoundException.class).when(orderService).cancelOrder(anyLong());
+
+        //when
+        EntityNotFoundException result = assertThrows(EntityNotFoundException.class, () -> target.cancelOrder(1L));
+
+        //then
+        assertThat(result).isInstanceOf(EntityNotFoundException.class);
+    }
+
+    @Test
+    public void 주문취소테스트_성공() throws Exception {
+        //given
+
+        //when
+        target.cancelOrder(1L);
+
+        //then
+        verify(orderService, times(1)).cancelOrder(anyLong());
     }
 }
