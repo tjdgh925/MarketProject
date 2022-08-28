@@ -22,12 +22,7 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider tokenProvider;
 
-    private static final List<String> EXCLUDE_URL =
-            Collections.unmodifiableList(
-                    Arrays.asList(
-                            "/api/**"
-                )
-        );
+    private String AUTHORIZATION = "Authorization";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,8 +31,7 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
 
         if (StringUtils.isNotEmpty(token))
         try {
-            if (StringUtils.isNotEmpty(token) && tokenProvider.validateToken(token)) {
-
+            if  (tokenProvider.validateToken(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -49,7 +43,7 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
     }
 
     private String getJwtToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader(AUTHORIZATION);
 
         if (StringUtils.isNotEmpty(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
