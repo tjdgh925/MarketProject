@@ -18,10 +18,10 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenProvider {
 
-    @Value("${token.access-token-expiration-time}")
+    @Value("${token.access-token-expiration-time:900000}")
     private String accessTokenExpirationTime;
 
-    @Value("${token.refresh-token-expiration-time}")
+    @Value("${token.refresh-token-expiration-time:1210500000}")
     private String refreshTokenExpirationTime;
 
     @Value("${token.secret}")
@@ -77,11 +77,7 @@ public class JwtTokenProvider {
             return true;
         } catch (MalformedJwtException e) {
             log.error("MalformedJwtException");
-        }
-//        catch (ExpiredJwtException e) {
-//            log.error("ExpiredJwtException");
-//        }
-        catch (UnsupportedJwtException e) {
+        } catch (UnsupportedJwtException e) {
             log.error("UnsupportedJwtException");
         } catch (IllegalArgumentException e) {
             log.error("IllegalArgumentException");
@@ -106,7 +102,7 @@ public class JwtTokenProvider {
 
     public boolean isTokenExpired(Date tokenExpiredTime) {
         Date now = new Date();
-        if(now.after(tokenExpiredTime)) {
+        if (now.after(tokenExpiredTime)) {
             return true;
         }
         return false;
