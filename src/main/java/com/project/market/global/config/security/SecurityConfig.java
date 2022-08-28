@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "img/**")
+        web.ignoring().antMatchers("/css/**", "/js/**")
                 .and().ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -48,17 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers().hasRole("USER")
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                //로그인 관련 설정
-//            .and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .defaultSuccessUrl("/")
-//                .failureHandler(loginFailureHandler)
-//                .usernameParameter("email")
-//            .and()
-//                .logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                .logoutSuccessUrl("/")
             .and()
                 .oauth2Login()
                 .userInfoEndpoint().userService(customOAuth2UserService)
@@ -67,7 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
                 .exceptionHandling()
-//                .authenticationEntryPoint(new AuthenticationEntryPointImpl())
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
