@@ -29,17 +29,16 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
 
         String token = getJwtToken(request);
 
-        if (StringUtils.isNotEmpty(token))
-        try {
-            if  (tokenProvider.validateToken(token)) {
-                Authentication authentication = tokenProvider.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (tokenValidate(token)) {
+            Authentication authentication = tokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private boolean tokenValidate(String token) {
+        return StringUtils.isNotEmpty(token) && tokenProvider.validateToken(token);
     }
 
     private String getJwtToken(HttpServletRequest request) {

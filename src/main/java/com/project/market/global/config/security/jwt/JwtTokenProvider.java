@@ -2,6 +2,7 @@ package com.project.market.global.config.security.jwt;
 
 import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.global.config.security.UserDetailsServiceImpl;
+import com.project.market.global.error.exception.TokenException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,14 +76,10 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token);
             return true;
-        } catch (MalformedJwtException e) {
-            log.error("MalformedJwtException");
-        } catch (UnsupportedJwtException e) {
-            log.error("UnsupportedJwtException");
-        } catch (IllegalArgumentException e) {
-            log.error("IllegalArgumentException");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new TokenException(e.getMessage());
         }
-        return false;
     }
 
     //User 권한 확인
