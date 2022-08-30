@@ -44,7 +44,7 @@ class FormLoginControllerTest {
 
     private Gson gson;
 
-    final String registerUrl = "/api/form/register";
+    final String registerUrl = "/api/register";
 
     private final String email = "test@email.com";
     private final String memberName = "tester";

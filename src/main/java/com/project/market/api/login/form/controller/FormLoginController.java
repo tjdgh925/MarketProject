@@ -23,7 +23,7 @@ public class FormLoginController {
 
     private final FormLoginService formLoginService;
 
-    @PostMapping(value = "/form/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity register(@Valid @RequestBody FormRegisterDto formRegisterDto, Errors errors) {
         new FormRegisterValidator().validate(formRegisterDto, errors);
 
