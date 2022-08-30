@@ -6,6 +6,7 @@ import com.project.market.api.login.form.validator.FormRegisterValidator;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.global.error.exception.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -31,10 +32,6 @@ public class FormLoginController {
             InvalidParameterException.throwErrorMessage(errors);
         }
 
-        Member member = formLoginService.registerMember(formRegisterDto);
-
-        String result = member.getMemberName() + "님 회원가입에 성공했습니다.";
-
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
