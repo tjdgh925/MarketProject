@@ -10,6 +10,8 @@ import com.project.market.global.error.exception.InvalidParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -60,10 +62,16 @@ class FormLoginControllerTest {
         gson = new Gson();
     }
 
-    @Test
-    public void 회원가입테스트_실패_유효성검증() throws Exception {
+    @ParameterizedTest
+    @CsvSource({
+            "testEmail",
+            "testEmail@test.", 
+            "이메일@email.com",
+            "test@AA.com"
+    })
+    public void 회원가입테스트_실패_유효성검증(String email) throws Exception {
         //given
-        FormRegisterDto sample = new FormRegisterDto("", memberName, address, password, password);
+        FormRegisterDto sample = new FormRegisterDto(memberName, email, address, password, password);
         String input = gson.toJson(sample);
 
         //when
