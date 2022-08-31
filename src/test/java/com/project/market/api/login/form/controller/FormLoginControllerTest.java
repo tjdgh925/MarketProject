@@ -1,10 +1,12 @@
 package com.project.market.api.login.form.controller;
 
 import com.google.gson.Gson;
+import com.project.market.api.login.form.dto.FormLoginRequestDto;
 import com.project.market.api.login.form.dto.FormRegisterDto;
 import com.project.market.api.login.form.service.FormLoginService;
 import com.project.market.api.login.form.validator.FormRegisterValidator;
 import com.project.market.domain.member.entity.Member;
+import com.project.market.global.config.security.jwt.TokenDto;
 import com.project.market.global.error.exception.ControllerExceptionHandler;
 import com.project.market.global.error.exception.InvalidParameterException;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +49,7 @@ class FormLoginControllerTest {
     private Gson gson;
 
     final String registerUrl = "/api/register";
+    final String loginUrl = "/api/login";
 
     private final String email = "test@email.com";
     private final String memberName = "tester";
@@ -96,6 +99,49 @@ class FormLoginControllerTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(post(registerUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(input)).andDo(print());
+
+        //then
+        resultActions.andExpect(
+                status().isOk()
+        );
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "testEmail, password",
+            "testEmail@test, password",
+            "이메일@email.com, password",
+            "test@AA.com,  "
+    })
+    public void 로그인테스트_실패_유효성검증(String email, String password) throws Exception {
+        //given
+        FormLoginRequestDto sample = new FormLoginRequestDto(email, password);
+        String input = gson.toJson(sample);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post(loginUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(input)).andDo(print());
+
+        //then
+        resultActions
+                .andExpect(status().is4xxClientError())
+                .andExpect(
+                        result -> assertTrue(result.getResolvedException() instanceof InvalidParameterException)
+                );
+    }
+
+    @Test
+    public void 로그인테스트_성공() throws Exception {
+        //given
+        doReturn(TokenDto.builder().build()).when(formLoginService).formLogin(any(FormLoginRequestDto.class));
+        FormLoginRequestDto sample = new FormLoginRequestDto(email, password);
+        String input = gson.toJson(sample);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post(loginUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(input)).andDo(print());
 
