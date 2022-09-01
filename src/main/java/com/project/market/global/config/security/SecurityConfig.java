@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/", "images/**", "/api/register", "/api/login").permitAll() //누구나 접근 가능
+                .antMatchers("/**/login", "/**/register", "/", "images/**").permitAll() //누구나 접근 가능
                 .antMatchers().hasRole("USER")
                 .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
