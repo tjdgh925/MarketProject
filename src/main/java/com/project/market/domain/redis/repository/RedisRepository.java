@@ -1,15 +1,16 @@
-package com.project.market.global.config.redis;
+package com.project.market.domain.redis.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class RedisService {
+public class RedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
 

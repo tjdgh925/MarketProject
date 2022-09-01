@@ -2,7 +2,8 @@ package com.project.market.domain.member.service;
 
 import com.project.market.domain.member.entity.Member;
 import com.project.market.domain.member.repository.MemberRepository;
-import com.project.market.global.config.redis.RedisService;
+import com.project.market.domain.redis.repository.RedisRepository;
+import com.project.market.domain.redis.service.RedisService;
 import com.project.market.global.error.exception.BusinessException;
 import com.project.market.global.error.exception.EntityNotFoundException;
 import com.project.market.global.error.exception.ErrorCode;
@@ -19,10 +20,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final RedisService redisService;
-
-    @Value("${token.refresh-token-expiration-time:1210500000}")
-    private Long refreshTokenExpirationTime;
-
+    
     @Transactional
     public void register(Member member) {
         validateDuplicateMember(member);
@@ -58,11 +56,11 @@ public class MemberService {
     }
 
     public void saveRefreshToken(Member member, String refreshToken) {
-        redisService.setValues(member.getEmail(), refreshToken, Duration.ofMillis(refreshTokenExpirationTime));
+        redisService.saveRefreshToken(member, refreshToken);
     }
 
     public String getRefreshTokenByEmail(String email) {
-        String refreshToken = redisService.getValues(email);
+        String refreshToken = redisService.getRefreshTokenByEmail(email);
         return refreshToken;
     }
 }
