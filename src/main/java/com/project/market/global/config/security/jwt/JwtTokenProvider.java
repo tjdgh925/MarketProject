@@ -32,12 +32,9 @@ public class JwtTokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
 
     public TokenDto createTokenDto(Member member) {
-        String accessToken = createAccessToken(member.getEmail(), member.getRole(), createAccessTokenExpireTime());
-        String refreshToken = createRefreshToken(member.getEmail(), createRefreshTokenExpireTime());
-
         return TokenDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken(createAccessToken(member.getEmail(), member.getRole(), createAccessTokenExpireTime()))
+                .refreshToken(createRefreshToken(member.getEmail(), createRefreshTokenExpireTime()))
                 .build();
     }
 
