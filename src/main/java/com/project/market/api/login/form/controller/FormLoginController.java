@@ -26,7 +26,7 @@ public class FormLoginController {
 
     private final FormLoginService formLoginService;
 
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register")
     public ResponseEntity register(@Valid @RequestBody FormRegisterDto formRegisterDto, Errors errors) {
         new FormRegisterValidator().validate(formRegisterDto, errors);
 
@@ -39,7 +39,7 @@ public class FormLoginController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody FormLoginRequestDto formLoginDto, Errors errors) {
         new FormLoginValidator().validate(formLoginDto, errors);
 
@@ -48,9 +48,7 @@ public class FormLoginController {
             InvalidParameterException.throwErrorMessage(errors);
         }
 
-        TokenDto result = formLoginService.formLogin(formLoginDto);
-
-        return ResponseEntity.ok(result);
-
+        return ResponseEntity.ok(formLoginService.formLogin(formLoginDto)
+        );
     }
 }
