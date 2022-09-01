@@ -28,6 +28,7 @@ public class FormLoginService {
         return newMember;
     }
 
+    @Transactional
     public TokenDto formLogin(FormLoginRequestDto formLoginDto){
         Member member = memberService.findMember(formLoginDto.getEmail());
         verifyPassword(member, formLoginDto);
