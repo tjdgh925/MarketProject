@@ -1,9 +1,11 @@
 package com.project.market.api.login.form.controller;
 
+import com.project.market.api.login.form.dto.FormLoginRequestDto;
 import com.project.market.api.login.form.dto.FormRegisterDto;
 import com.project.market.api.login.form.service.FormLoginService;
+import com.project.market.api.login.form.validator.FormLoginValidator;
 import com.project.market.api.login.form.validator.FormRegisterValidator;
-import com.project.market.domain.member.entity.Member;
+import com.project.market.global.config.security.jwt.TokenDto;
 import com.project.market.global.error.exception.InvalidParameterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class FormLoginController {
 
     private final FormLoginService formLoginService;
 
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register")
     public ResponseEntity register(@Valid @RequestBody FormRegisterDto formRegisterDto, Errors errors) {
         new FormRegisterValidator().validate(formRegisterDto, errors);
 
@@ -32,6 +34,21 @@ public class FormLoginController {
             InvalidParameterException.throwErrorMessage(errors);
         }
 
+        formLoginService.registerMember(formRegisterDto);
+
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/login")
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody FormLoginRequestDto formLoginDto, Errors errors) {
+        new FormLoginValidator().validate(formLoginDto, errors);
+
+
+        if (errors.hasErrors()) {
+            InvalidParameterException.throwErrorMessage(errors);
+        }
+
+        return ResponseEntity.ok(formLoginService.formLogin(formLoginDto)
+        );
     }
 }

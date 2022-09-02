@@ -1,6 +1,7 @@
 package com.project.market.global.config.security.jwt;
 
 import com.project.market.domain.member.constant.MemberRole;
+import com.project.market.domain.member.entity.Member;
 import com.project.market.global.config.security.UserDetailsServiceImpl;
 import com.project.market.global.error.exception.TokenException;
 import io.jsonwebtoken.*;
@@ -29,6 +30,13 @@ public class JwtTokenProvider {
     private String tokenSecret;
 
     private final UserDetailsServiceImpl userDetailsService;
+
+    public TokenDto createTokenDto(Member member) {
+        return TokenDto.builder()
+                .accessToken(createAccessToken(member.getEmail(), member.getRole(), createAccessTokenExpireTime()))
+                .refreshToken(createRefreshToken(member.getEmail(), createRefreshTokenExpireTime()))
+                .build();
+    }
 
     public String createAccessToken(String email, MemberRole role, Date expirationTime) {
         String accessToken = Jwts.builder()
