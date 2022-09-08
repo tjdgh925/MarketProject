@@ -16,7 +16,7 @@ public class TokenController {
 
     private final TokenService tokenService;
 
-    @GetMapping("/refreshtoken")
+    @GetMapping("/renew")
     public ResponseEntity<TokenDto> refreshToken(@RequestHeader String Authorization, @RequestHeader String refreshToken) {
         return ResponseEntity.ok(tokenService.refreshToken(Authorization, refreshToken));
     }
