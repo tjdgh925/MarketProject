@@ -3,6 +3,7 @@ package com.project.market.global.config.security.jwt;
 import com.project.market.domain.member.constant.MemberRole;
 import com.project.market.domain.member.entity.Member;
 import com.project.market.global.config.security.UserDetailsServiceImpl;
+import com.project.market.global.error.exception.ErrorCode;
 import com.project.market.global.error.exception.TokenException;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -90,24 +91,13 @@ public class JwtTokenProvider {
         }
     }
 
-    //User 권한 확인
-    public Claims getTokenClaims(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser().setSigningKey(tokenSecret)
-                    .parseClaimsJws(token).getBody()
-            ;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-//            throw new NotValidTokenException(ErrorCode.NOT_VALID_TOKEN);
-        }
-        return claims;
-    }
 
-    public boolean isTokenExpired(Date tokenExpiredTime) {
+    public boolean isTokenExpired(String token) {
+
+        Date expiration = Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token).getBody().getExpiration();
+
         Date now = new Date();
-        if (now.after(tokenExpiredTime)) {
+        if (now.after(expiration)) {
             return true;
         }
         return false;
