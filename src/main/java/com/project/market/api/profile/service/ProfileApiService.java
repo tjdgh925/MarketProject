@@ -19,6 +19,8 @@ public class ProfileApiService {
     private final JwtTokenProvider tokenProvider;
     private final MemberService memberService;
 
+    private final String BEARER = "Bearer ";
+
     public String getEmailByToken(String bearerToken) {
         String accessToken = getJwtToken(bearerToken);
 
@@ -48,11 +50,11 @@ public class ProfileApiService {
         if (!validateBearerToken(bearerToken)) {
             throw new TokenException(ErrorCode.NOT_VALID_TOKEN.getMessage());
         }
-        return bearerToken.substring("Bearer ".length());
+        return bearerToken.substring(BEARER.length());
     }
 
     private boolean validateBearerToken(String bearerToken) {
-        return StringUtils.isNotEmpty(bearerToken) && bearerToken.startsWith("Bearer ");
+        return StringUtils.isNotEmpty(bearerToken) && bearerToken.startsWith(BEARER);
     }
 
 }

@@ -21,19 +21,21 @@ public class ProfileApiController {
     private final ProfileApiService profileApiService;
     private final ProfileUpdateValidator profileUpdateValidator;
 
+    private final String AUTHORIZATION = "Authorization";
+
     @GetMapping("/email")
-    public ResponseEntity getEmail(@RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity getEmail(@RequestHeader(AUTHORIZATION) String bearerToken) {
         return ResponseEntity.ok(profileApiService.getEmailByToken(bearerToken));
     }
 
     @GetMapping("/profile")
-    public ResponseEntity getProfile(@RequestHeader("Authorization") String bearerToken) {
+    public ResponseEntity getProfile(@RequestHeader(AUTHORIZATION) String bearerToken) {
         return ResponseEntity.ok(profileApiService.getMemberByToken(bearerToken));
     }
 
     @PatchMapping("/profile")
     public ResponseEntity updateProfile(
-            @RequestHeader("Authorization") String bearerToken,
+            @RequestHeader(AUTHORIZATION) String bearerToken,
             @Valid @RequestBody ProfileUpdateDto profileUpdateDto,
             Errors errors
     ) {
