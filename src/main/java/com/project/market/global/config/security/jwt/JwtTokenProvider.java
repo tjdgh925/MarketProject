@@ -81,15 +81,15 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token).getBody().getAudience();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String jwtToken) {
         try {
-            Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token);
-            return true;
+            Jws<Claims> claims = Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(jwtToken);
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new TokenException(e.getMessage());
+            return false;
         }
     }
+
 
 
     public boolean isTokenExpired(String token) {

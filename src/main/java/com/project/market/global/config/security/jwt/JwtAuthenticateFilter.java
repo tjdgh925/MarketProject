@@ -34,12 +34,6 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
 
         String token = getJwtToken(request);
 
-        if (tokenProvider.isTokenExpired(token)) {
-            request.setAttribute("exception", ErrorCode.TOKEN_EXPIRED.getMessage());
-            throw new TokenException(ErrorCode.TOKEN_EXPIRED.getMessage());
-        }
-
-
         try {
             if (validateToken(token)) {
                 Authentication authentication = tokenProvider.getAuthentication(token);

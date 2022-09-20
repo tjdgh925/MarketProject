@@ -15,15 +15,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        String exception = (String)request.getAttribute("exception");
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
-        JSONObject responseJson = new JSONObject();
-        responseJson.put("message", exception);
-        responseJson.put("code", 403);
-
-        response.getWriter().print(responseJson);
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }

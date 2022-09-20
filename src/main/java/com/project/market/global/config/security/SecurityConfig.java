@@ -49,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/**/login", "/**/register", "/", "images/**").permitAll() //누구나 접근 가능
+                .antMatchers("/**/login", "/**/register", "/", "images/**","/api/**").permitAll() //누구나 접근 가능
                 .antMatchers().hasRole("USER")
-                .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .antMatchers("**/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()
