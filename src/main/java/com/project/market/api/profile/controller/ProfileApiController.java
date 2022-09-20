@@ -19,6 +19,7 @@ import javax.validation.Valid;
 public class ProfileApiController {
 
     private final ProfileApiService profileApiService;
+    private final ProfileUpdateValidator profileUpdateValidator;
 
     @GetMapping("/email")
     public ResponseEntity getEmail(@RequestHeader("Authorization") String bearerToken) {
@@ -36,7 +37,7 @@ public class ProfileApiController {
             @Valid @RequestBody ProfileUpdateDto profileUpdateDto,
             Errors errors
     ) {
-        new ProfileUpdateValidator().validate(profileUpdateDto, errors);
+        profileUpdateValidator.validate(profileUpdateDto, errors);
 
         profileApiService.updateProfile(bearerToken, profileUpdateDto);
 

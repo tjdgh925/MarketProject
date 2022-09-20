@@ -1,10 +1,13 @@
 package com.project.market.api.profile.validator;
 
 import com.project.market.api.profile.dto.ProfileUpdateDto;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+
+@Component
 public class ProfileUpdateValidator implements Validator {
 
     @Override

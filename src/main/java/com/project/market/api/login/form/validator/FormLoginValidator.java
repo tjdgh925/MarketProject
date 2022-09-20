@@ -3,6 +3,7 @@ package com.project.market.api.login.form.validator;
 import com.project.market.api.login.form.dto.FormLoginRequestDto;
 import com.project.market.api.login.form.dto.FormRegisterDto;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -10,6 +11,8 @@ import org.springframework.validation.Validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+@Component
 public class FormLoginValidator implements Validator {
 
     private static final String emailRegExp =
