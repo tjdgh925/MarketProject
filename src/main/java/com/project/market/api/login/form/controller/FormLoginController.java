@@ -25,10 +25,12 @@ import javax.validation.Valid;
 public class FormLoginController {
 
     private final FormLoginService formLoginService;
+    private final FormRegisterValidator formRegisterValidator;
+    private final FormLoginValidator formLoginValidator;
 
     @PostMapping(value = "/register")
     public ResponseEntity register(@Valid @RequestBody FormRegisterDto formRegisterDto, Errors errors) {
-        new FormRegisterValidator().validate(formRegisterDto, errors);
+        formRegisterValidator.validate(formRegisterDto, errors);
 
         if (errors.hasErrors()) {
             InvalidParameterException.throwErrorMessage(errors);
@@ -41,7 +43,7 @@ public class FormLoginController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody FormLoginRequestDto formLoginDto, Errors errors) {
-        new FormLoginValidator().validate(formLoginDto, errors);
+        formLoginValidator.validate(formLoginDto, errors);
 
 
         if (errors.hasErrors()) {

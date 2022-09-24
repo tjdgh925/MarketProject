@@ -14,7 +14,9 @@ public enum ErrorCode {
     LOGIN_ERROR(400, "로그인 오류 발생."),
     NOT_VALID_MEMBER_TYPE(400, "유효한 로그인 타입이 아닙니다."),
     WRONG_PASSWORD(400, "비밀번호를 확인해주세요."),
-    NOT_VALID_TOKEN(400, "Token이 유효하지 않습니다."),
+    NOT_VALID_TOKEN(403, "Token이 유효하지 않습니다."),
+    TOKEN_EXPIRED(403, "Token이 만료되었습니다."),
+    TOKNE_EMPTY(403, "Token이 존재하지 않습니다."),
 
     // 상품(Item)
     NO_REP_IMAGE(400, "대표 이미지를 등록해주세요."),

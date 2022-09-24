@@ -49,9 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/**/login", "/**/register", "/", "images/**", "/api/refreshtoken").permitAll() //누구나 접근 가능
+                .antMatchers("/**/login", "/**/register", "/", "images/**","/api/**").permitAll() //누구나 접근 가능
                 .antMatchers().hasRole("USER")
-                .antMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .antMatchers("**/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             .and()
                 .oauth2Login()
@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
+        configuration.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT","PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 

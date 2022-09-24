@@ -1,5 +1,6 @@
 package com.project.market.global.config.security.jwt;
 
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "UnAuthorized");
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }

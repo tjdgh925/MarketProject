@@ -23,7 +23,7 @@ public class TokenService {
         accessToken = getJwtToken(accessToken);
         refreshToken = getJwtToken(refreshToken);
 
-        if (tokenProvider.validateToken(accessToken)) {
+        if (validateToken(accessToken)) {
             return TokenDto.builder().
                     accessToken(accessToken)
                     .refreshToken(refreshToken)
@@ -36,6 +36,10 @@ public class TokenService {
         validateRefreshToken(refreshToken, savedToken);
 
         return createNewToken(email);
+    }
+
+    private boolean validateToken(String accessToken) {
+        return tokenProvider.validateToken(accessToken) && !tokenProvider.isTokenExpired(accessToken);
     }
 
     private TokenDto createNewToken(String email) {
